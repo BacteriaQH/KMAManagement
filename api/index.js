@@ -21,7 +21,9 @@ mongoose
     .catch((error) => {
         console.log(error);
     });
-
+app.get('/', (req, res)=>{
+    res.send("QLSV API")
+})
 app.get('/api/test', (req, res, next) => {
     console.log('test is success');
 });
