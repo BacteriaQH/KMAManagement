@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+var cors = require('cors')
 
 //const userRoute = require('./routes/User');
 const authRoute = require('./routes/auth');
@@ -21,6 +22,7 @@ mongoose
     .catch((error) => {
         console.log(error);
     });
+app.use(cors())
 app.get('/', (req, res)=>{
     res.send("QLSV API")
 })
