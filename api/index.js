@@ -21,7 +21,7 @@ mongoose
     })
     .catch((error) => {
         console.log(error);
-    });
+    }); 
 app.use(cors())
 app.get('/', (req, res)=>{
     res.send("QLSV API")
@@ -34,6 +34,6 @@ app.use('/api/auth', authRoute);
 // app.use('/api/users', userRoute);
 // app.use('/api/products', productRoute);
 
-app.listen(process.env.PORT || 5000, () => {
+app.listen(process.env.PORT || 3001, () => {
     console.log(`Server running on port ${process.env.PORT}`);
 });
