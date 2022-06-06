@@ -5,7 +5,7 @@ import Image from '../Image';
 import images from '~/assets/image';
 function Footer() {
     return (
-        <Row className="sticky-bottom">
+        <Row className="bg-light mt-3 sticky-bottom">
             <Col lg={4} className="text-center">
                 &copy;<a href="/">SiteName</a>, All Right Reserved.
             </Col>

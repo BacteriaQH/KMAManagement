@@ -13,8 +13,8 @@ function DefaultLayout({ children }) {
                 <Col lg={3} className="bg-light ms-3 me-4">
                     <Sidebar />
                 </Col>
-                <Col lg={8} className={'bg-light ms-3 mt-3'}>
-                    {children}
+                <Col lg={8}>
+                    <div style={{ minHeight: '400px' }}> {children}</div>
                     <Footer />
                 </Col>
             </Row>

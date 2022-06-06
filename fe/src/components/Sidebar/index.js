@@ -4,10 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { hasChildren } from './utils';
 import { menu } from './menu';
 import Button from '../Button';
+import Role from '../Role';
 
 const Sidebar = () => {
     return (
         <SidebarMenu>
+            <SidebarMenu.Header>
+                <Role />
+            </SidebarMenu.Header>
             <SidebarMenu.Body>
                 {menu.map((subMenu, index) => (
                     <MenuItem item={subMenu} key={index} />

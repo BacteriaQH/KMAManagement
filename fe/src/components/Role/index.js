@@ -1,60 +1,55 @@
 import { forwardRef } from 'react';
 import Tippy from '@tippyjs/react/headless';
-import { Col, Container, Row } from 'react-bootstrap';
-import { BsFillCaretDownFill } from 'react-icons/bs';
+import { Col, Row } from 'react-bootstrap';
 
 import Image from '../Image';
 import Button from '../Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 const Dropdown = () => {
     return (
         <span className="d-flex flex-column bg-light border rounded-3">
-            <Button to="/setting" primary={true}>
-                Cài đặt
-            </Button>
-            <Button to="/logout" primary={true}>
-                Đăng xuất
-            </Button>
+            <Button to="/setting">Cài đặt</Button>
+            <Button to="/logout">Đăng xuất</Button>
         </span>
     );
 };
 
 const Icon = forwardRef((props, ref) => {
-    return <BsFillCaretDownFill ref={ref} />;
+    return <FontAwesomeIcon ref={ref} icon={faCircleChevronDown} />;
 });
 const Role = ({ showDropdown }) => {
     return (
-        <Container>
-            <Row>
-                <Col lg={3}>
-                    <Image isAvatar isMale alt="avatar" />
-                </Col>
-                <Col lg={8}>
-                    <Row>
-                        <Col lg={8}>
-                            <Row>Văn Hoàng Phúc</Row>
-                            <Row>Admin</Row>
-                        </Col>
-                        <Col lg={2}>
-                            {showDropdown && (
-                                <div>
-                                    <Tippy
-                                        placement="bottom"
-                                        interactive
-                                        render={(attrs) => <Dropdown tabIndex="-1" {...attrs} />}
-                                    >
-                                        <span>
-                                            {' '}
-                                            <Icon />
-                                        </span>
-                                    </Tippy>
-                                </div>
-                            )}
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
-        </Container>
+        <Row className="mb-3 mt-3">
+            <Col lg={3}>
+                <Image isAvatar isMale alt="avatar" />
+            </Col>
+            <Col lg={8}>
+                <Row>
+                    <Col lg={8}>
+                        <Row>Văn Hoàng Phúc</Row>
+                        <Row>Admin</Row>
+                    </Col>
+                    <Col lg={2}>
+                        {showDropdown && (
+                            <div>
+                                <Tippy
+                                    placement="bottom"
+                                    interactive
+                                    render={(attrs) => <Dropdown tabIndex="-1" {...attrs} />}
+                                >
+                                    <span>
+                                        {' '}
+                                        <Icon />
+                                    </span>
+                                </Tippy>
+                            </div>
+                        )}
+                    </Col>
+                </Row>
+            </Col>
+        </Row>
     );
 };
 
