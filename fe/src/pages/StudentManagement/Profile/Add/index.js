@@ -1,7 +1,10 @@
+import { useRef } from 'react';
+
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRef } from 'react';
+
 import { Form, Tab, Tabs, Row, Col, Button, FormGroup, FormLabel, FormControl } from 'react-bootstrap';
+
 import Title from '~/components/Title';
 
 const AddStudent = () => {

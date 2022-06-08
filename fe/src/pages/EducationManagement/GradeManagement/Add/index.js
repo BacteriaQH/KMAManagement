@@ -1,5 +1,11 @@
+import Title from '../../../../components/Title';
+
 function AddGrade() {
-    return <>Add Grade</>;
+    return (
+        <>
+            <Title title="Thêm điểm" />
+        </>
+    );
 }
 
 export default AddGrade;

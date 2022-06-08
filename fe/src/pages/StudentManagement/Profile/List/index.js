@@ -1,5 +1,126 @@
+import { useRef, useState } from 'react';
+
+import { FormGroup, Table, Button as ButtonBootstrap, FormControl } from 'react-bootstrap';
+
+import { faPenSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import * as xlsx from 'xlsx';
+
+import Title from '~/components/Title';
+import Search from '~/components/Search';
+import Button from '~/components/Button';
+
 function ListStudent() {
-    return <>ListStudent</>;
+    const [showExcel, setShowExcel] = useState(false);
+    const [excelHeaderValue, setExcelHeaderValue] = useState([]);
+    const [excelBodyValue, setExcelBodyValue] = useState([]);
+
+    const fileRef = useRef();
+
+    const handleChangeFile = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (evt) => {
+            const bstr = evt.target.result;
+            const wb = xlsx.read(bstr, { type: 'binary' });
+            const wsname = wb.SheetNames[0];
+            const ws = wb.Sheets[wsname];
+            const data = xlsx.utils.sheet_to_json(ws, { header: 1 });
+            data.splice(0, 3);
+            const header = data.splice(0, 1);
+            setShowExcel(true);
+            setExcelHeaderValue(header);
+            setExcelBodyValue(data);
+        };
+        reader.readAsBinaryString(file);
+    };
+
+    const handleDelete = () => {
+        return;
+    };
+    return (
+        <>
+            <Title title="Danh sách học viên" />
+            <Search />
+            <FormGroup>
+                <ButtonBootstrap onClick={() => fileRef.current.click()} className="m-2">
+                    Nhập file excel
+                </ButtonBootstrap>
+                <FormControl
+                    type="file"
+                    ref={fileRef}
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                    className="d-none"
+                    onChange={handleChangeFile}
+                />
+            </FormGroup>
+            {showExcel ? (
+                <>
+                    <Title title="Preview" />
+                    <Table striped hover>
+                        <thead>
+                            <tr>
+                                {excelHeaderValue[0].map((item, index) => (
+                                    <th scope="col" key={index}>
+                                        {item}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {excelBodyValue.map((items, index) => (
+                                <tr key={index}>
+                                    {items.map((item, index) => (
+                                        <th scope="col" key={index}>
+                                            {item}
+                                        </th>
+                                    ))}
+                                    <td>
+                                        <a className="btn btn-primary btn-sm" href="/">
+                                            <FontAwesomeIcon icon={faPenSquare} />
+                                        </a>
+                                        <Button to={'/students/profile/delete'} danger sm onclick={handleDelete}>
+                                            <FontAwesomeIcon icon={faTrash} />
+                                        </Button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </>
+            ) : (
+                <Table striped hover>
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Họ và Tên</th>
+                            <th scope="col">Mã Sinh Viên</th>
+                            <th scope="col">Lớp</th>
+                            <th scope="col">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Văn Hoàng Phúc</td>
+                            <td>AT160541</td>
+                            <td>AT16E</td>
+                            <td>
+                                <a className="btn btn-primary btn-sm" href="/">
+                                    <FontAwesomeIcon icon={faPenSquare} />
+                                </a>
+                                <Button to={'/students/profile/delete'} danger sm onclick={handleDelete}>
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </Button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </Table>
+            )}
+        </>
+    );
 }
 
 export default ListStudent;

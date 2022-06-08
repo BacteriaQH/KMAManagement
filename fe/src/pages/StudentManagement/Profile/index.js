@@ -25,6 +25,7 @@ function StudentProfile() {
                             Chỉnh Sửa Học Viên
                         </Button>
                     </Col>
+                    <Col></Col>
                 </Row>
             </Container>
         </>
