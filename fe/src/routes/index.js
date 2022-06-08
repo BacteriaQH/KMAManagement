@@ -27,15 +27,15 @@ const routes = [
 
     { path: '/students/profile', component: StudentProfile },
     { path: '/students/profile/add', component: AddStudent },
-    { path: '/students/profile/edit', component: EditStudent },
+    { path: '/students/profile/edit', component: EditStudent }, //no
     { path: '/students/profile/list', component: ListStudent },
 
-    { path: '/students/report', component: Report },
-    { path: '/students/report/report2', component: Report2 },
+    { path: '/students/report', component: Report }, // no
+    { path: '/students/report/report2', component: Report2 }, //no
 
     { path: '/teachers/profile', component: TeacherProfile },
     { path: '/teachers/profile/add', component: AddTeacher },
-    { path: '/teachers/profile/edit', component: EditTeacher },
+    { path: '/teachers/profile/edit', component: EditTeacher }, //no
     { path: '/teachers/profile/list', component: ListTeacher },
 
     { path: '/grades', component: GradeManagement },

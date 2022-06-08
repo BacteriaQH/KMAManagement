@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
     faHouse,
     faUserGraduate,
@@ -31,7 +29,7 @@ export const menu = [
                 to: '/students/profile',
             },
             {
-                title: 'Báo cáo',
+                title: 'Báo cáo *',
                 icon: faBookOpen,
                 to: '/students/report',
             },
@@ -57,17 +55,17 @@ export const menu = [
                 to: '/',
             },
             {
-                title: 'Quản lý tốt nghiệp',
+                title: 'Quản lý tốt nghiệp*',
                 icon: faGraduationCap,
                 to: '/',
             },
             {
-                title: 'Xử lý học vụ',
+                title: 'Xử lý học vụ *',
                 icon: faFilter,
                 to: '/',
             },
             {
-                title: 'Khác',
+                title: 'Khác *',
                 icon: faAsterisk,
                 to: '/',
             },

@@ -1,4 +1,4 @@
-const { Form, Row, FormGroup, Col, FormLabel, FormSelect, Button } = require('react-bootstrap');
+const { Form, Row, FormGroup, Col, FormLabel, FormSelect } = require('react-bootstrap');
 
 const Search = ({ showStudentSelect = false, showSubjectSelect = false }) => {
     // showStudentSelect = true;
@@ -76,7 +76,14 @@ const Search = ({ showStudentSelect = false, showSubjectSelect = false }) => {
                     <Row>
                         <FormGroup as={Col} controlId="formSubject">
                             <FormLabel>Loại học phần</FormLabel>{' '}
-                            <Form.Check name="subject" type={'radio'} id={'all'} label={'Tất cả'} checked value={1} />
+                            <Form.Check
+                                name="subject"
+                                type={'radio'}
+                                id={'all'}
+                                label={'Tất cả'}
+                                defaultChecked={true}
+                                value={1}
+                            />
                             <Form.Check name="subject" type={'radio'} id={'2nd'} label={'Nhóm ngành 2'} value={0} />
                         </FormGroup>
                         <FormGroup as={Col}>
@@ -90,16 +97,6 @@ const Search = ({ showStudentSelect = false, showSubjectSelect = false }) => {
                         </FormGroup>
                     </Row>
                 )}
-                <FormGroup as={Col}>
-                    <FormLabel>Tra cứu</FormLabel>
-                    <br />
-                    <Button variant="primary" type="submit">
-                        Tra cứu
-                    </Button>
-                    <Button variant="primary" type="submit" className="ms-1">
-                        Xuất excel
-                    </Button>
-                </FormGroup>
             </Row>
         </>
     );

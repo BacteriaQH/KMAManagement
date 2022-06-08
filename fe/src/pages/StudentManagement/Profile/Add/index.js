@@ -1,16 +1,24 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Form, Tab, Tabs, Row, Col, Button, FormGroup, FormLabel, FormControl } from 'react-bootstrap';
+import { Form, Tab, Tabs, Row, Col, Button, FormGroup, FormLabel, FormControl, Image } from 'react-bootstrap';
 
+import axios from 'axios';
 import Title from '~/components/Title';
 
 const AddStudent = () => {
     const fileRef = useRef();
+    const [studentImage, setStudentImage] = useState(null);
     const handleChangeFile = (e) => {
-        const file = e.target.files;
+        const file = e.target.files[0];
+        e.preventDefault();
+        const data = new FormData();
+        data.append('file', file);
+        axios.post('/upload', data).then((res) => {
+            setStudentImage(res.data);
+        });
     };
     return (
         <>
@@ -31,21 +39,25 @@ const AddStudent = () => {
                                 </FormGroup>
                             </Col>
                             <Col>
-                                <FormGroup className="d-flex justify-content-center">
-                                    <FontAwesomeIcon
-                                        icon={faPlus}
-                                        onClick={() => fileRef.current.click()}
-                                        className="fa-5x border border-primary p-4"
-                                        color="#009cff "
-                                    />
-                                    <FormControl
-                                        type="file"
-                                        ref={fileRef}
-                                        accept="image/*"
-                                        className="d-none"
-                                        onChange={handleChangeFile}
-                                    />
-                                </FormGroup>
+                                {studentImage ? (
+                                    <Image src={studentImage.path} alt={studentImage.originalname} />
+                                ) : (
+                                    <FormGroup className="d-flex justify-content-center">
+                                        <FontAwesomeIcon
+                                            icon={faPlus}
+                                            onClick={() => fileRef.current.click()}
+                                            className="fa-5x border border-primary p-4"
+                                            color="#009cff "
+                                        />
+                                        <FormControl
+                                            type="file"
+                                            ref={fileRef}
+                                            accept="image/*"
+                                            className="d-none"
+                                            onChange={handleChangeFile}
+                                        />
+                                    </FormGroup>
+                                )}
                             </Col>
                         </Row>
                         <Row>
@@ -55,7 +67,14 @@ const AddStudent = () => {
                             </FormGroup>
                             <FormGroup as={Col} controlId="formGender">
                                 <FormLabel>Giới tính</FormLabel>{' '}
-                                <Form.Check name="gender" type={'radio'} id={'male'} label={'Nam'} checked value={1} />
+                                <Form.Check
+                                    name="gender"
+                                    type={'radio'}
+                                    id={'male'}
+                                    label={'Nam'}
+                                    defaultChecked
+                                    value={1}
+                                />
                                 <Form.Check name="gender" type={'radio'} id={'female'} label={'Nữ'} value={0} />
                             </FormGroup>
                         </Row>
