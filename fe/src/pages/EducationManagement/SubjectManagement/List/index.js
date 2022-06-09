@@ -10,39 +10,13 @@ import * as xlsx from 'xlsx';
 import Title from '~/components/Title';
 import Button from '~/components/Button';
 
-function ListTeacher() {
-    const fileRef = useRef();
+function ListSubject() {
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
     const [excelBodyValue, setExcelBodyValue] = useState([]);
+    const valueFetch = false;
+    const fileRef = useRef();
 
-    const valueFetch = [
-        {
-            STT: 1,
-            'Tên giảng viên': 'Nguyễn Văn A',
-            'Mã giảng viên': 'GV001',
-            Khoa: 'Công nghệ thông tin',
-            Email: 'nva@gmail.com',
-            SDT: '0123456789',
-        },
-        {
-            STT: 2,
-            'Tên giảng viên': 'Nguyễn Văn A',
-            'Mã giảng viên': 'GV002',
-            Khoa: 'Công nghệ thông tin',
-            Email: 'nva@gmail.com',
-            SDT: '0123456789',
-        },
-    ];
-
-    const ExportToExcel = () => {
-        const worksheet = xlsx.utils.json_to_sheet(valueFetch);
-        const workbook = xlsx.utils.book_new();
-        xlsx.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
-        //let buffer = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
-        //XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
-        xlsx.writeFile(workbook, 'DataSheet.xlsx');
-    };
     const handleChangeFile = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -67,22 +41,16 @@ function ListTeacher() {
     };
     return (
         <>
-            <Title title="Danh sách giảng viên" />
+            <Title title="Danh sách môn học" />
             <Tabs defaultActiveKey={'list'} transition className="m-3">
-                <Tab eventKey={'list'} title="Danh sách giảng viên">
+                <Tab eventKey={'list'} title="Danh sách môn học">
                     <FormGroup as={Col}>
                         <FormLabel>Tra cứu</FormLabel>
                         <br />
                         <ButtonBootstrap variant="primary" type="submit">
                             Tra cứu
                         </ButtonBootstrap>
-                        <ButtonBootstrap
-                            variant="primary"
-                            type="submit"
-                            className="ms-1"
-                            disabled={!valueFetch}
-                            onClick={ExportToExcel}
-                        >
+                        <ButtonBootstrap variant="primary" className="ms-1" disabled={!valueFetch}>
                             Xuất excel
                         </ButtonBootstrap>
                     </FormGroup>
@@ -90,18 +58,26 @@ function ListTeacher() {
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
-                                <th scope="col">Họ và Tên</th>
-                                <th scope="col">Mã giảng viên</th>
+                                <th scope="col">Tên môn</th>
+                                <th scope="col">Mã môn học</th>
                                 <th scope="col">Khoa</th>
+                                <th scope="col">Tổng số tiết</th>
+                                <th scope="col">Số tiết lý thuyết</th>
+                                <th scope="col">Số tiết thực hành</th>
+                                <th scope="col">Số tiết bài tập</th>
                                 <th scope="col">&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <th scope="row">1</th>
-                                <td>Nguyễn Văn A</td>
-                                <td>GV001</td>
+                                <td>Cơ sở dữ liệu</td>
+                                <td>CSDL01</td>
                                 <td>Công nghệ thông tin</td>
+                                <td>10</td>
+                                <td>5</td>
+                                <td>3</td>
+                                <td>2</td>
                                 <td>
                                     <a className="btn btn-primary btn-sm" href="/">
                                         <FontAwesomeIcon icon={faPenSquare} />
@@ -174,4 +150,4 @@ function ListTeacher() {
     );
 }
 
-export default ListTeacher;
+export default ListSubject;

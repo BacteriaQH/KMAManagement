@@ -52,10 +52,10 @@ export const menu = [
             {
                 title: 'Quản lý môn học',
                 icon: faReceipt,
-                to: '/',
+                to: '/subjects',
             },
             {
-                title: 'Quản lý tốt nghiệp*',
+                title: 'Quản lý tốt nghiệp *',
                 icon: faGraduationCap,
                 to: '/',
             },

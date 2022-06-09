@@ -22,6 +22,11 @@ import FindGrade from '../pages/EducationManagement/GradeManagement/Find';
 import GradeManagement from '../pages/EducationManagement/GradeManagement';
 import Report from '../pages/StudentManagement/Report';
 
+//      subject
+import AddSubject from '../pages/EducationManagement/SubjectManagement/Add';
+import ListSubject from '../pages/EducationManagement/SubjectManagement/List';
+import SubjectManagement from '../pages/EducationManagement/SubjectManagement';
+
 const routes = [
     { path: '/', component: Home },
 
@@ -41,6 +46,10 @@ const routes = [
     { path: '/grades', component: GradeManagement },
     { path: '/grades/add', component: AddGrade },
     { path: '/grades/find', component: FindGrade },
+
+    { path: '/subjects', component: SubjectManagement },
+    { path: '/subjects/add', component: AddSubject },
+    { path: '/subjects/list', component: ListSubject },
 ];
 
 export default routes;
