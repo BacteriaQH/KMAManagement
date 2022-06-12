@@ -14,7 +14,7 @@ function DefaultLayout({ children }) {
                     <Sidebar />
                 </Col>
                 <Col lg={8}>
-                    <div style={{ minHeight: '400px' }}> {children}</div>
+                    <div style={{ minHeight: '640px' }}> {children}</div>
                     <Footer />
                 </Col>
             </Row>
