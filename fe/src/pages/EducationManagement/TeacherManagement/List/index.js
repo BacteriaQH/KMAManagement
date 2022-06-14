@@ -4,6 +4,7 @@ import { FormGroup, Table, Button as ButtonBootstrap, FormControl, Tabs, Tab, Fo
 
 import { faPenSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 
 import * as xlsx from 'xlsx';
 
@@ -15,7 +16,7 @@ function ListTeacher() {
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
     const [excelBodyValue, setExcelBodyValue] = useState([]);
-
+    const [dataFetch, setDataFetch] = useState([]);
     const valueFetch = [
         {
             STT: 1,
@@ -27,6 +28,30 @@ function ListTeacher() {
         },
         {
             STT: 2,
+            'Tên giảng viên': 'Nguyễn Văn A',
+            'Mã giảng viên': 'GV002',
+            Khoa: 'Công nghệ thông tin',
+            Email: 'nva@gmail.com',
+            SDT: '0123456789',
+        },
+        {
+            STT: 3,
+            'Tên giảng viên': 'Nguyễn Văn A',
+            'Mã giảng viên': 'GV002',
+            Khoa: 'Công nghệ thông tin',
+            Email: 'nva@gmail.com',
+            SDT: '0123456789',
+        },
+        {
+            STT: 4,
+            'Tên giảng viên': 'Nguyễn Văn A',
+            'Mã giảng viên': 'GV002',
+            Khoa: 'Công nghệ thông tin',
+            Email: 'nva@gmail.com',
+            SDT: '0123456789',
+        },
+        {
+            STT: 5,
             'Tên giảng viên': 'Nguyễn Văn A',
             'Mã giảng viên': 'GV002',
             Khoa: 'Công nghệ thông tin',
@@ -65,6 +90,9 @@ function ListTeacher() {
     const handleDelete = () => {
         return;
     };
+    const handleData = () => {
+        axios.get('http://localhost:3001/teacher').then((res) => setDataFetch(res.data));
+    };
     return (
         <>
             <Title title="Danh sách giảng viên" />
@@ -73,7 +101,7 @@ function ListTeacher() {
                     <FormGroup as={Col}>
                         <FormLabel>Tra cứu</FormLabel>
                         <br />
-                        <ButtonBootstrap variant="primary" type="submit">
+                        <ButtonBootstrap variant="primary" type="submit" onClick={handleData}>
                             Tra cứu
                         </ButtonBootstrap>
                         <ButtonBootstrap

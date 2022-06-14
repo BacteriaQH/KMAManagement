@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import Tippy from '@tippyjs/react/headless';
 import { Col, Row } from 'react-bootstrap';
-
 import Image from '../Image';
 import Button from '../Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,6 +18,7 @@ const Dropdown = () => {
 const Icon = forwardRef((props, ref) => {
     return <FontAwesomeIcon ref={ref} icon={faCircleChevronDown} />;
 });
+
 const Role = ({ showDropdown }) => {
     return (
         <Row className="mb-3 mt-3">
@@ -37,6 +37,7 @@ const Role = ({ showDropdown }) => {
                                 <Tippy
                                     placement="bottom"
                                     interactive
+                                    delay="300"
                                     render={(attrs) => <Dropdown tabIndex="-1" {...attrs} />}
                                 >
                                     <span>

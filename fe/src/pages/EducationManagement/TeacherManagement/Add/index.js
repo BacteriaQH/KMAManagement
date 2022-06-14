@@ -69,7 +69,7 @@ function AddTeacher() {
             </Row>
             <Row>
                 <FormGroup as={Col}>
-                    <FormLabel>Khoa</FormLabel>
+                    <FormLabel>Ngày sinh</FormLabel>
                     <FormControl type="date" />
                 </FormGroup>
                 <FormGroup as={Col} controlId="formPhoneNumber">

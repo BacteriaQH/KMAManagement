@@ -18,14 +18,11 @@ function StudentProfile() {
                             Danh sách học viên
                         </Button>
                     </Col>
-                </Row>
-                <Row>
                     <Col>
                         <Button to={'/students/profile/edit'} primary>
                             Chỉnh Sửa Học Viên
                         </Button>
                     </Col>
-                    <Col></Col>
                 </Row>
             </Container>
         </>

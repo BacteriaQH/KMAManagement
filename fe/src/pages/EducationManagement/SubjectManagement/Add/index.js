@@ -40,15 +40,15 @@ function AddSubject() {
                     <FormLabel>Tổng số tiết</FormLabel>
                     <FormControl type="number" placeholder="Nhập Tổng số tiết" />
                 </FormGroup>
-                <FormGroup as={Col} controlId="formnumber">
+                <FormGroup as={Col} controlId="formTheory">
                     <FormLabel>Số tiết lý thuyết</FormLabel>
                     <FormControl type="number" placeholder="Nhập Số tiết lý thuyết" />
                 </FormGroup>
-                <FormGroup as={Col} controlId="formnumber">
+                <FormGroup as={Col} controlId="formPractice">
                     <FormLabel>Số tiết thực hành</FormLabel>
                     <FormControl type="number" placeholder="Nhập Số tiết thực hành" />
                 </FormGroup>
-                <FormGroup as={Col} controlId="formnumber">
+                <FormGroup as={Col} controlId="formExercise">
                     <FormLabel>Số tiết bài tập</FormLabel>
                     <FormControl type="number" placeholder="Nhập Số tiết bài tập" />
                 </FormGroup>

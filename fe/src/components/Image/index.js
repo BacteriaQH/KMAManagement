@@ -3,7 +3,7 @@ import images from '~/assets/image';
 
 function Image({ src, alt, isMale, isLogo, isIcon, isAvatar, height = '' }) {
     if (isLogo) {
-        src = images.logo;
+        src = images.logoB;
         height = '70px';
     } else if (isIcon) {
         height = '20px';

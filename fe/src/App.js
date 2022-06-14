@@ -13,17 +13,21 @@ function App() {
                 <Routes>
                     {routes.map((route, index) => {
                         const Page = route.component;
-                        return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <DefaultLayout>
-                                        <Page />
-                                    </DefaultLayout>
-                                }
-                            />
-                        );
+                        if (!route.defaultLayout) {
+                            return <Route key={index} path={route.path} element={<Page />} />;
+                        } else {
+                            return (
+                                <Route
+                                    key={index}
+                                    path={route.path}
+                                    element={
+                                        <DefaultLayout>
+                                            <Page />
+                                        </DefaultLayout>
+                                    }
+                                />
+                            );
+                        }
                     })}
                 </Routes>
             </div>

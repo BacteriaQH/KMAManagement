@@ -17,13 +17,13 @@ function TeacherProfile() {
                         Danh sách giảng viên
                     </Button>
                 </Col>
-            </Row>
-            <Row>
                 <Col>
                     <Button to={'/teachers/profile/edit'} primary>
                         Chỉnh Sửa giảng viên
                     </Button>
                 </Col>
+            </Row>
+            <Row>
                 <Col></Col>
             </Row>
         </>

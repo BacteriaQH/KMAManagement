@@ -10,6 +10,7 @@ import * as xlsx from 'xlsx';
 import Title from '~/components/Title';
 import Search from '~/components/Search';
 import Button from '~/components/Button';
+import { Link } from 'react-router-dom';
 
 function ListStudent() {
     const [showExcel, setShowExcel] = useState(false);
@@ -73,9 +74,9 @@ function ListStudent() {
                                 <td>AT160541</td>
                                 <td>AT16E</td>
                                 <td>
-                                    <a className="btn btn-primary btn-sm" href="/">
+                                    <Link className="btn btn-primary btn-sm" to="students/edit">
                                         <FontAwesomeIcon icon={faPenSquare} />
-                                    </a>
+                                    </Link>
                                     <Button to={'/students/profile/delete'} danger sm onclick={handleDelete}>
                                         <FontAwesomeIcon icon={faTrash} />
                                     </Button>
