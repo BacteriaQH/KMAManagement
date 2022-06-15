@@ -19,7 +19,7 @@ const Icon = forwardRef((props, ref) => {
     return <FontAwesomeIcon ref={ref} icon={faCircleChevronDown} />;
 });
 
-const Role = ({ showDropdown }) => {
+const Role = ({ showDropdown, name, role }) => {
     return (
         <Row className="mb-3 mt-3">
             <Col lg={3}>
@@ -28,8 +28,8 @@ const Role = ({ showDropdown }) => {
             <Col lg={8}>
                 <Row>
                     <Col lg={8}>
-                        <Row>Văn Hoàng Phúc</Row>
-                        <Row>Admin</Row>
+                        <Row>{name}</Row>
+                        <Row>{role}</Row>
                     </Col>
                     <Col lg={2}>
                         {showDropdown && (

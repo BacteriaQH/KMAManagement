@@ -8,28 +8,30 @@ import axios from 'axios';
 import Image from '../../components/Image';
 
 export default function Login() {
+    const redirect = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [dataRes, setDataRes] = useState([]);
     const [resCode, setResCode] = useState(0);
+    const [err, setErr] = useState('');
     function validateForm() {
-        return email.includes('@') && password.length > 8;
+        return email.includes('@') && password.length > 4;
     }
 
-    const redirect = useNavigate();
     function handleSubmit(event) {
         event.preventDefault();
         axios
-            .post('http://localhost:3001/login', {
+            .post('http://localhost:3000/api/login', {
                 email,
                 password,
             })
             .then((res) => {
                 setResCode(res.data.code);
                 if (resCode === 200) {
-                    setDataRes(res.data.result);
+                    localStorage.setItem('user', JSON.stringify(res.data.result));
                     redirect('/');
+                } else {
+                    setErr(res.data.message);
                 }
             });
     }
@@ -65,7 +67,7 @@ export default function Login() {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </Form.Group>
-                        {resCode === 404 && <div className="text-warning"> Username or password is incorrect</div>}
+                        {resCode !== 200 && <div className="text-danger"> {err}</div>}
                         <Button block="true" size="lg" type="submit" disabled={!validateForm()} className="mt-3">
                             Login
                         </Button>

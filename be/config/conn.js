@@ -4,6 +4,7 @@ const sequelize = new Sequelize('kmamanagement', 'root', null, {
     host: 'localhost',
     port: 3306,
     dialect: 'mysql',
+    // logging: false,
 });
 
 const conn = async () => {

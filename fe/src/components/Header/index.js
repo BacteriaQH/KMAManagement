@@ -4,6 +4,8 @@ import Role from '../Role';
 import Image from '../Image';
 
 function Header() {
+    const user = JSON.parse(localStorage.getItem('user'));
+
     return (
         <Container>
             <Row>
@@ -21,7 +23,7 @@ function Header() {
                 <Col lg={3}>
                     <Row>
                         {' '}
-                        <Role showDropdown={true} />
+                        <Role showDropdown={true} name={user.name} role={user.roleid} />
                     </Row>
                 </Col>
             </Row>

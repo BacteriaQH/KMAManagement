@@ -7,10 +7,11 @@ import Button from '../Button';
 import Role from '../Role';
 
 const Sidebar = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
     return (
         <SidebarMenu>
             <SidebarMenu.Header>
-                <Role />
+                <Role name={user.name} role={user.roleid} />
             </SidebarMenu.Header>
             <SidebarMenu.Body>
                 {menu.map((subMenu, index) => (

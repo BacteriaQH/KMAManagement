@@ -91,7 +91,7 @@ function ListTeacher() {
         return;
     };
     const handleData = () => {
-        axios.get('http://localhost:3001/teacher').then((res) => setDataFetch(res.data));
+        axios.get('http://localhost:3000/api/teacher').then((res) => setDataFetch(res.data));
     };
     return (
         <>
