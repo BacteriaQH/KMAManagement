@@ -1,5 +1,18 @@
-import { useRef, useState } from 'react';
-import { Col, FormGroup, FormLabel, Tab, Tabs, Button as ButtonBootstrap, Table, FormControl } from 'react-bootstrap';
+import axios from 'axios';
+import React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import {
+    Col,
+    FormGroup,
+    FormLabel,
+    Tab,
+    Tabs,
+    Button as ButtonBootstrap,
+    Table,
+    FormControl,
+    Row,
+    FormSelect,
+} from 'react-bootstrap';
 import * as xlsx from 'xlsx';
 import Search from '~/components/Search';
 import Title from '~/components/Title';
@@ -8,6 +21,13 @@ function FindGrade() {
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
     const [excelBodyValue, setExcelBodyValue] = useState([]);
+    const [classes, setClasses] = useState('');
+    const [classSelect, setClassSelect] = useState('');
+    const [student, setStudent] = useState('');
+    const [studentSelect, setStudentSelect] = useState('');
+    const [grade, setGrade] = useState([]);
+    const [studentID, setStudentID] = useState('');
+    const [subjectID, setSubjectID] = useState('');
     const valueFetch = false;
 
     const fileRef = useRef();
@@ -30,79 +50,187 @@ function FindGrade() {
         };
         reader.readAsBinaryString(file);
     };
+    useEffect(() => {
+        axios.post('http://localhost:3000/api/query', ['classes']).then((res) => {
+            setClasses(res.data.classes);
+        });
+    }, []);
+    const handleChangeClass = (e) => {
+        setClassSelect(e.target.value);
+    };
+    useEffect(() => {
+        axios
+            .get('http://localhost:3000/api/students/by-class', {
+                params: { classes: classSelect },
+            })
+            .then((res) => {
+                setStudent(res.data);
+            });
+    }, [classSelect]);
+    const handleChangeStudent = (e) => {
+        setStudentSelect(e.target.value);
+    };
+    const handleClickToFindGrade = () => {
+        axios
+            .get('http://localhost:3000/api/grade/find-grade-by-student-id', {
+                params: { student_id: studentSelect },
+            })
+            .then((res) => {
+                setGrade(res.data);
+            });
+        axios
+            .get('http://localhost:3000/api/students/id', {
+                params: { id: studentSelect },
+            })
+            .then((res) => {
+                setStudentID([res.data]);
+            });
+    };
+
+    useEffect(() => {
+        let arr = [];
+        grade.map((grd) => {
+            axios
+                .get('http://localhost:3000/api/subjects/id', {
+                    params: {
+                        id: grd.subject_id,
+                    },
+                })
+                .then((res) => {
+                    arr.push(res.data);
+                    setSubjectID(arr);
+                });
+            return 1;
+        });
+    }, [grade]);
     return (
         <>
             <Title title={'Tra cứu điểm'} />
             <Tabs defaultActiveKey={'find'} transition className="m-3">
                 <Tab eventKey={'find'} title="Tra cứu điểm">
-                    <Search showStudentSelect showSubjectSelect />
+                    <Row>
+                        <FormGroup as={Col}>
+                            <FormLabel>Lớp</FormLabel>
+                            <FormSelect onChange={handleChangeClass}>
+                                <option>Chọn lớp</option>
+                                {classes ? classes.map((c) => <option key={c.id}>{c.name}</option>) : <></>}
+                            </FormSelect>
+                        </FormGroup>
+                        <FormGroup as={Col}>
+                            <FormLabel>Học viên</FormLabel>
+                            <FormSelect onChange={handleChangeStudent}>
+                                <option>Chọn học viên</option>
+                                {student ? (
+                                    student.map((std) => (
+                                        <option key={std.id} value={std.id}>
+                                            {std.name}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <></>
+                                )}
+                            </FormSelect>
+                        </FormGroup>
+                    </Row>
                     <FormGroup as={Col}>
                         <FormLabel>Tra cứu</FormLabel>
                         <br />
-                        <ButtonBootstrap variant="primary" type="submit">
+                        <ButtonBootstrap
+                            variant="primary"
+                            className="btn btn-primary mb-3"
+                            onClick={handleClickToFindGrade}
+                        >
                             Tra cứu
                         </ButtonBootstrap>
-                        <ButtonBootstrap variant="primary" type="submit" className="ms-1" disabled={!valueFetch}>
+                        <ButtonBootstrap
+                            variant="primary"
+                            className="btn btn-primary mb-3 ms-1"
+                            type="submit"
+                            disabled={!valueFetch}
+                        >
                             Xuất excel
                         </ButtonBootstrap>
                     </FormGroup>
-                    <Table striped hover className="text-center">
-                        <col />
-                        <colgroup span="2"></colgroup>
-                        <colgroup span="2"></colgroup>
-                        <thead>
-                            <tr>
-                                <th colSpan="12" scope="colgroup">
-                                    Học viên
-                                </th>
-                                <td colSpan="5">Môn ATCSDL</td>
-                                <td colSpan="5">Môn ATCSDL</td>
-                                <td colSpan="5">Môn ATCSDL</td>
-                            </tr>
-                            <tr>
-                                <th scope="col">STT</th>
-                                <th scope="col">Mã học viên</th>
-                                <th scope="col">Họ đệm</th>
-                                <th scope="col">Tên</th>
-                                <th scope="col">Ngày sinh</th>
-                                <th scope="col">Tổng TC</th>
-                                <th scope="col">Số TCTB</th>
-                                <th scope="col">STCTLN</th>
-                                <th scope="col">DTBC</th>
-                                <th scope="col">DCTB(10)</th>
-                                <th scope="col">Số môn KD</th>
-                                <th scope="col">Số TC KD</th>
-                                <th scope="col">TP1</th>
-                                <th scope="col">TP2</th>
-                                <th scope="col">THI</th>
-                                <th scope="col">TKHP</th>
-                                <th scope="col">Chữ</th>
-                                <th scope="col">TP1</th>
-                                <th scope="col">TP2</th>
-                                <th scope="col">THI</th>
-                                <th scope="col">TKHP</th>
-                                <th scope="col">Chữ</th>
-                                <th scope="col">TP1</th>
-                                <th scope="col">TP2</th>
-                                <th scope="col">THI</th>
-                                <th scope="col">TKHP</th>
-                                <th scope="col">Chữ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>AT150121</td>
-                                <td>Nguyễn Minh</td>
-                                <td>Hoàng</td>
-                                <td>AT15A</td>
-                                <td>9</td>
-                                <td>9</td>
-                                <td>3</td>
-                                <td>7</td>
-                            </tr>
-                        </tbody>
-                    </Table>
+                    <div className="scroll">
+                        <Table striped hover bordered className="text-center table-responsive">
+                            <thead>
+                                <tr>
+                                    <th colSpan="4" scope="colgroup">
+                                        Học viên
+                                    </th>
+                                    {subjectID ? (
+                                        subjectID.map((sbj, index) => (
+                                            <th colSpan="5" scope="colgroup" key={index}>
+                                                {sbj.name}
+                                            </th>
+                                        ))
+                                    ) : (
+                                        <></>
+                                    )}
+                                </tr>
+                                <tr>
+                                    <td>STT</td>
+                                    <td>Mã học viên</td>
+                                    <td>Họ và Tên</td>
+                                    <td>Lớp</td>
+                                    {subjectID ? (
+                                        subjectID.map((sbj, index) => {
+                                            return (
+                                                <React.Fragment key={index}>
+                                                    <td>TP1</td>
+                                                    <td>TP2</td>
+                                                    <td>THI</td>
+                                                    <td>TKHP</td>
+                                                    <td>Chữ</td>
+                                                </React.Fragment>
+                                            );
+                                        })
+                                    ) : (
+                                        <></>
+                                    )}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {studentID ? (
+                                        studentID.map((std, index) => (
+                                            <React.Fragment key={index}>
+                                                <th scope="row">{++index}</th>
+                                                <th>{std.code}</th>
+                                                <th>{std.name}</th>
+                                                <th>{std.class}</th>
+                                            </React.Fragment>
+                                        ))
+                                    ) : (
+                                        <></>
+                                    )}
+                                    {grade ? (
+                                        grade.map((grd, index) => (
+                                            <React.Fragment key={index}>
+                                                <th>{grd.grade1}</th>
+                                                <th>{grd.grade2}</th>
+                                                <th>
+                                                    {grd.second_exam
+                                                        ? `${grd.first_exam}|${grd.second_exam}`
+                                                        : grd.first_exam}
+                                                </th>
+                                                <th>
+                                                    {grd.average2 ? `${grd.average1}|${grd.average2}` : grd.average1}
+                                                </th>
+                                                <th>
+                                                    {grd.second_letter
+                                                        ? `${grd.first_letter}|${grd.second_letter}`
+                                                        : grd.first_letter}
+                                                </th>
+                                            </React.Fragment>
+                                        ))
+                                    ) : (
+                                        <></>
+                                    )}
+                                </tr>
+                            </tbody>
+                        </Table>
+                    </div>
                 </Tab>
                 <Tab eventKey={'import'} title="Import file excel">
                     <Search showStudentSelect showSubjectSelect />

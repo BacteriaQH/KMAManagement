@@ -1,10 +1,113 @@
-const router = require('express').Router();
+const {
+    addStudent,
+    listStudent,
+    listStudentNoClass,
+    updateStudent,
+    getStudentById,
+    getStudentByClass,
+    deleteStudent,
+} = require('../services/CRUD');
+const { generateUID } = require('../services/generateUID');
 
-const AddStudents = async (req, res) => {
+const AddStudent = async (req, res) => {
     const body = req.body;
-    console.log(body);
+    body.id = generateUID(20);
+    body.name = `${body.firstname.trim() + ' ' + body.lastname.trim()}`;
+    body.gender = Number(body.gender);
+    const result = await addStudent(body);
+    result
+        ? res.status(200).json({ code: 200, message: 'Create student success' })
+        : res.status(401).json({ code: 401, message: 'Error' });
+};
+const ListStudent = async (req, res) => {
+    const students = await listStudent();
+    const std = [];
+    students.map((student) => {
+        std.push({
+            id: student.dataValues.id,
+            code: student.dataValues.code,
+            name: student.dataValues.name,
+            gender: student.dataValues.gender,
+            class: student.dataValues.class,
+        });
+    });
+    res.status(200).send(std);
+};
+const ListStudentNoClass = async (req, res) => {
+    const students = await listStudentNoClass();
+    const std = [];
+    students.map((student) => {
+        std.push({
+            id: student.dataValues.id,
+            code: student.dataValues.code,
+            name: student.dataValues.name,
+            gender: student.dataValues.gender,
+        });
+    });
+    res.status(200).send(std);
+};
+const UpdateStudent = async (req, res) => {
+    const body = req.body;
+    body.name = `${body.firstname.trim() + ' ' + body.lastname.trim()}`;
+    body.gender = Number(body.gender);
+    const { id, firstname, lastname, ...other } = body;
+    const resultQ = await updateStudent(id, other);
+    resultQ
+        ? res.status(200).json({ code: 200, message: 'Update student success' })
+        : res.status(401).json({ code: 401, message: 'Error' });
 };
 
+const UpdateClassStudent = async (req, res) => {
+    const body = req.body;
+    const result = [];
+    for (let i = 0; i < body.length; i++) {
+        const { id, ...other } = body[i];
+        const resultQ = await updateStudent(id, other);
+        resultQ ? result.push(1) : result.push(0);
+    }
+    result.includes(0)
+        ? res.status(401).json({ code: 401, message: 'Error' })
+        : res.status(200).json({ code: 200, message: 'Update class for student success' });
+};
+const GetStudentById = async (req, res) => {
+    const id = req.query.id;
+    const student = await getStudentById(id);
+    res.status(200).send(student[0].dataValues);
+};
+const ListStudentByClass = async (req, res) => {
+    const qClass = req.query.classes;
+    let students;
+    if (qClass == 'all') {
+        students = await listStudent();
+    } else {
+        students = await getStudentByClass(qClass);
+    }
+
+    const std = [];
+    students.map((student) => {
+        std.push({
+            id: student.dataValues.id,
+            code: student.dataValues.code,
+            name: student.dataValues.name,
+            gender: student.dataValues.gender,
+            class: student.dataValues.class,
+        });
+    });
+    res.status(200).send(std);
+};
+const DeleteStudent = async (req, res) => {
+    const qStudent = await deleteStudent(req.query.id);
+    qStudent
+        ? res.status(200).json({ code: 200, message: 'Success' })
+        : res.status(404).json({ code: 404, message: 'Error' });
+};
 module.exports = {
-    AddStudents,
+    AddStudent,
+    ListStudent,
+    ListStudentNoClass,
+    UpdateStudent,
+    GetStudentById,
+    UpdateClassStudent,
+    ListStudentByClass,
+    DeleteStudent,
 };

@@ -1,12 +1,12 @@
 import Title from '~/components/Title';
 import Button from '~/components/Button';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
 function StudentProfile() {
     return (
         <>
             <Title title={'Hồ sơ'} />
-            <Container>
+            <>
                 <Row>
                     <Col>
                         <Button to={'/students/profile/add'} primary>
@@ -18,13 +18,8 @@ function StudentProfile() {
                             Danh sách học viên
                         </Button>
                     </Col>
-                    <Col>
-                        <Button to={'/students/profile/edit'} primary>
-                            Chỉnh Sửa Học Viên
-                        </Button>
-                    </Col>
                 </Row>
-            </Container>
+            </>
         </>
     );
 }

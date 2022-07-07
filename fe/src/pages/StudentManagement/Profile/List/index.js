@@ -1,24 +1,38 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { FormGroup, Table, Button as ButtonBootstrap, FormControl, Tabs, Tab, FormLabel, Col } from 'react-bootstrap';
+import {
+    FormGroup,
+    Table,
+    Button as ButtonBootstrap,
+    FormControl,
+    Tabs,
+    Tab,
+    FormLabel,
+    Col,
+    Row,
+    FormSelect,
+} from 'react-bootstrap';
 
-import { faPenSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as xlsx from 'xlsx';
 
 import Title from '~/components/Title';
 import Search from '~/components/Search';
-import Button from '~/components/Button';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 function ListStudent() {
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
     const [excelBodyValue, setExcelBodyValue] = useState([]);
-    const valueFetch = false;
+    const [valueFetch, setValueFetch] = useState([]);
     const fileRef = useRef();
-
+    const [departments, setDepartments] = useState('');
+    const [classes, setClasses] = useState('');
+    const [courses, setCourses] = useState('');
+    const [classSelect, setClassesSelect] = useState('');
     const handleChangeFile = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -37,51 +51,129 @@ function ListStudent() {
         };
         reader.readAsBinaryString(file);
     };
+    useEffect(() => {
+        axios.post('http://localhost:3000/api/query', ['departments', 'classes', 'courses']).then((res) => {
+            setDepartments(res.data.departments);
+            setClasses(res.data.classes);
+            setCourses(res.data.courses);
+        });
+    }, []);
 
-    const handleDelete = () => {
-        return;
+    const handleFetchData = () => {
+        axios
+            .get('http://localhost:3000/api/students/by-class', {
+                params: { classes: classSelect },
+            })
+            .then((res) => {
+                res.data.map((data) => {
+                    if (data.gender === true) {
+                        data.gender = 'Nam';
+                    } else {
+                        data.gender = 'Nữ';
+                    }
+                    return true;
+                });
+                setValueFetch(res.data);
+            });
+    };
+    const handleChange = (e) => {
+        setClassesSelect(e.target.value);
+    };
+
+    const ExportToExcel = () => {
+        const worksheet = xlsx.utils.json_to_sheet(valueFetch);
+        const workbook = xlsx.utils.book_new();
+        xlsx.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+        //let buffer = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
+        //XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+        xlsx.writeFile(workbook, 'DataSheet.xlsx');
     };
     return (
         <>
             <Title title="Danh sách học viên" />
             <Tabs defaultActiveKey={'list'} transition className="m-3">
                 <Tab eventKey={'list'} title="Danh sách học viên">
-                    <Search />
+                    <Row>
+                        <FormGroup as={Col}>
+                            <FormLabel>Khoa</FormLabel>
+                            <FormSelect>
+                                <option>Chọn khoa</option>
+                                {departments ? (
+                                    departments.map((dep) => <option key={dep.id}>{dep.name}</option>)
+                                ) : (
+                                    <></>
+                                )}
+                            </FormSelect>
+                        </FormGroup>
+                        <FormGroup as={Col}>
+                            <FormLabel>Khoá</FormLabel>
+                            <FormSelect>
+                                <option>Chọn khoá</option>
+                                {courses ? (
+                                    courses.map((course) => <option key={course.id}>{course.code}</option>)
+                                ) : (
+                                    <></>
+                                )}
+                            </FormSelect>
+                        </FormGroup>
+                        <FormGroup as={Col}>
+                            <FormLabel>Lớp</FormLabel>
+                            <FormSelect onChange={handleChange}>
+                                <option>Chọn lớp</option>
+                                <option value={'all'}>Tất cả</option>
+                                {classes ? classes.map((c) => <option key={c.id}>{c.name}</option>) : <></>}
+                            </FormSelect>
+                        </FormGroup>
+                    </Row>
                     <FormGroup as={Col}>
                         <FormLabel>Tra cứu</FormLabel>
                         <br />
-                        <ButtonBootstrap variant="primary" type="submit">
+                        <ButtonBootstrap variant="primary" onClick={handleFetchData}>
                             Tra cứu
                         </ButtonBootstrap>
-                        <ButtonBootstrap variant="primary" type="submit" className="ms-1" disabled={!valueFetch}>
+                        <ButtonBootstrap
+                            variant="primary"
+                            type="submit"
+                            className="ms-1"
+                            disabled={!valueFetch}
+                            onClick={ExportToExcel}
+                        >
                             Xuất excel
                         </ButtonBootstrap>
                     </FormGroup>
-                    <Table striped hover>
+                    <Table striped hover className="table-responsive">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Họ và Tên</th>
                                 <th scope="col">Mã Sinh Viên</th>
+                                <th scope="col">Giới tính</th>
                                 <th scope="col">Lớp</th>
                                 <th scope="col">&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Văn Hoàng Phúc</td>
-                                <td>AT160541</td>
-                                <td>AT16E</td>
-                                <td>
-                                    <Link className="btn btn-primary btn-sm" to="students/edit">
-                                        <FontAwesomeIcon icon={faPenSquare} />
-                                    </Link>
-                                    <Button to={'/students/profile/delete'} danger sm onclick={handleDelete}>
-                                        <FontAwesomeIcon icon={faTrash} />
-                                    </Button>
-                                </td>
-                            </tr>
+                            {valueFetch ? (
+                                valueFetch.map((value, index) => (
+                                    <tr key={index}>
+                                        <th scope="row">{value.id}</th>
+                                        <td>{value.name}</td>
+                                        <td>{value.code}</td>
+                                        <td>{value.gender}</td>
+                                        <td>{value.class}</td>
+                                        <td>
+                                            <Link
+                                                className="btn btn-primary btn-sm"
+                                                to={`/students/profile/edit/${value.id}`}
+                                            >
+                                                <FontAwesomeIcon icon={faPenSquare} />
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <></>
+                            )}
                         </tbody>
                     </Table>
                 </Tab>
@@ -125,14 +217,6 @@ function ListStudent() {
                                                 <a className="btn btn-primary btn-sm" href="/">
                                                     <FontAwesomeIcon icon={faPenSquare} />
                                                 </a>
-                                                <Button
-                                                    to={'/students/profile/delete'}
-                                                    danger
-                                                    sm
-                                                    onclick={handleDelete}
-                                                >
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </Button>
                                             </td>
                                         </tr>
                                     ))}

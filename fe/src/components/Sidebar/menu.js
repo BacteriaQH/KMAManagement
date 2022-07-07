@@ -45,6 +45,16 @@ export const menu = [
                 to: '/teachers/profile',
             },
             {
+                title: 'Quản lý lớp học',
+                icon: faChalkboardTeacher,
+                to: '/class',
+            },
+            {
+                title: 'Lập lịch học',
+                icon: faChalkboardTeacher,
+                to: '/schedule',
+            },
+            {
                 title: 'Quản lý điểm',
                 icon: faAward,
                 to: '/grades',

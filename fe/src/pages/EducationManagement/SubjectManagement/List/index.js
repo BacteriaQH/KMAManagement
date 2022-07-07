@@ -2,19 +2,19 @@ import { useRef, useState } from 'react';
 
 import { FormGroup, Table, Button as ButtonBootstrap, FormControl, Tabs, Tab, FormLabel, Col } from 'react-bootstrap';
 
-import { faPenSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as xlsx from 'xlsx';
 
 import Title from '~/components/Title';
-import Button from '~/components/Button';
+import axios from 'axios';
 
 function ListSubject() {
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
     const [excelBodyValue, setExcelBodyValue] = useState([]);
-    const valueFetch = false;
+    const [valueFetch, setValueFetch] = useState('');
     const fileRef = useRef();
 
     const handleChangeFile = (e) => {
@@ -35,9 +35,18 @@ function ListSubject() {
         };
         reader.readAsBinaryString(file);
     };
-
-    const handleDelete = () => {
-        return;
+    const handleFetchData = () => {
+        axios.get('http://localhost:3000/api/subjects/list').then((res) => {
+            setValueFetch(res.data);
+        });
+    };
+    const ExportToExcel = () => {
+        const worksheet = xlsx.utils.json_to_sheet(valueFetch);
+        const workbook = xlsx.utils.book_new();
+        xlsx.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+        //let buffer = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
+        //XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+        xlsx.writeFile(workbook, 'DataSheet.xlsx');
     };
     return (
         <>
@@ -47,14 +56,19 @@ function ListSubject() {
                     <FormGroup as={Col}>
                         <FormLabel>Tra cứu</FormLabel>
                         <br />
-                        <ButtonBootstrap variant="primary" type="submit">
+                        <ButtonBootstrap variant="primary" onClick={handleFetchData}>
                             Tra cứu
                         </ButtonBootstrap>
-                        <ButtonBootstrap variant="primary" className="ms-1" disabled={!valueFetch}>
+                        <ButtonBootstrap
+                            variant="primary"
+                            className="ms-1"
+                            disabled={!valueFetch}
+                            onClick={ExportToExcel}
+                        >
                             Xuất excel
                         </ButtonBootstrap>
                     </FormGroup>
-                    <Table striped hover>
+                    <Table striped hover className="table-responsive">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -69,24 +83,27 @@ function ListSubject() {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Cơ sở dữ liệu</td>
-                                <td>CSDL01</td>
-                                <td>Công nghệ thông tin</td>
-                                <td>10</td>
-                                <td>5</td>
-                                <td>3</td>
-                                <td>2</td>
-                                <td>
-                                    <a className="btn btn-primary btn-sm" href="/">
-                                        <FontAwesomeIcon icon={faPenSquare} />
-                                    </a>
-                                    <Button to={'/students/profile/delete'} danger sm onclick={handleDelete}>
-                                        <FontAwesomeIcon icon={faTrash} />
-                                    </Button>
-                                </td>
-                            </tr>
+                            {valueFetch ? (
+                                valueFetch.map((value, index) => (
+                                    <tr key={index}>
+                                        <th scope="row">{value.id}</th>
+                                        <td>{value.name}</td>
+                                        <td>{value.code}</td>
+                                        <td>{value.department}</td>
+                                        <td>{value.all}</td>
+                                        <td>{value.theory}</td>
+                                        <td>{value.practice}</td>
+                                        <td>{value.exercise}</td>
+                                        <td>
+                                            <a className="btn btn-primary btn-sm" href={`/subjects/edit/${value.id}`}>
+                                                <FontAwesomeIcon icon={faPenSquare} />
+                                            </a>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <></>
+                            )}
                         </tbody>
                     </Table>
                 </Tab>
@@ -129,14 +146,6 @@ function ListSubject() {
                                                 <a className="btn btn-primary btn-sm" href="/">
                                                     <FontAwesomeIcon icon={faPenSquare} />
                                                 </a>
-                                                <Button
-                                                    to={'/students/profile/delete'}
-                                                    danger
-                                                    sm
-                                                    onclick={handleDelete}
-                                                >
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </Button>
                                             </td>
                                         </tr>
                                     ))}

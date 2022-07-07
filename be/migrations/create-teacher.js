@@ -26,7 +26,7 @@ module.exports = {
             },
             gender: {
                 allowNull: false,
-                type: Sequelize.INTEGER,
+                type: Sequelize.BOOLEAN,
             },
             phone: {
                 allowNull: false,

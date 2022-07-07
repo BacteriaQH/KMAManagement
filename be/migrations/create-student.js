@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('Student', {
+        await queryInterface.createTable('Students', {
             id: {
                 allowNull: false,
                 primaryKey: true,
@@ -22,15 +22,16 @@ module.exports = {
             image: {
                 type: Sequelize.STRING,
             },
+            class: {
+                type: Sequelize.STRING,
+            },
             bank_number: {
                 type: Sequelize.STRING,
             },
             bank: {
                 type: Sequelize.STRING,
             },
-            position: {
-                type: Sequelize.STRING,
-            },
+
             school_year_id: {
                 type: Sequelize.STRING,
             },
@@ -60,12 +61,15 @@ module.exports = {
             },
             nationality: {
                 type: Sequelize.STRING,
+                default: 'Việt Nam',
             },
             ethnic: {
                 type: Sequelize.STRING,
+                default: 'Kinh',
             },
             religion: {
                 type: Sequelize.STRING,
+                default: 'Không',
             },
             wish: {
                 type: Sequelize.STRING,
@@ -168,6 +172,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Student');
+        await queryInterface.dropTable('Students');
     },
 };

@@ -2,63 +2,21 @@ import { useRef, useState } from 'react';
 
 import { FormGroup, Table, Button as ButtonBootstrap, FormControl, Tabs, Tab, FormLabel, Col } from 'react-bootstrap';
 
-import { faPenSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 
 import * as xlsx from 'xlsx';
 
 import Title from '~/components/Title';
-import Button from '~/components/Button';
+import { Link } from 'react-router-dom';
 
 function ListTeacher() {
     const fileRef = useRef();
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
     const [excelBodyValue, setExcelBodyValue] = useState([]);
-    const [dataFetch, setDataFetch] = useState([]);
-    const valueFetch = [
-        {
-            STT: 1,
-            'Tên giảng viên': 'Nguyễn Văn A',
-            'Mã giảng viên': 'GV001',
-            Khoa: 'Công nghệ thông tin',
-            Email: 'nva@gmail.com',
-            SDT: '0123456789',
-        },
-        {
-            STT: 2,
-            'Tên giảng viên': 'Nguyễn Văn A',
-            'Mã giảng viên': 'GV002',
-            Khoa: 'Công nghệ thông tin',
-            Email: 'nva@gmail.com',
-            SDT: '0123456789',
-        },
-        {
-            STT: 3,
-            'Tên giảng viên': 'Nguyễn Văn A',
-            'Mã giảng viên': 'GV002',
-            Khoa: 'Công nghệ thông tin',
-            Email: 'nva@gmail.com',
-            SDT: '0123456789',
-        },
-        {
-            STT: 4,
-            'Tên giảng viên': 'Nguyễn Văn A',
-            'Mã giảng viên': 'GV002',
-            Khoa: 'Công nghệ thông tin',
-            Email: 'nva@gmail.com',
-            SDT: '0123456789',
-        },
-        {
-            STT: 5,
-            'Tên giảng viên': 'Nguyễn Văn A',
-            'Mã giảng viên': 'GV002',
-            Khoa: 'Công nghệ thông tin',
-            Email: 'nva@gmail.com',
-            SDT: '0123456789',
-        },
-    ];
+    const [valueFetch, setValueFetch] = useState('');
 
     const ExportToExcel = () => {
         const worksheet = xlsx.utils.json_to_sheet(valueFetch);
@@ -86,13 +44,20 @@ function ListTeacher() {
         };
         reader.readAsBinaryString(file);
     };
+    const handleFetchData = () => {
+        axios.get('http://localhost:3000/api/teachers/list').then((res) => {
+            res.data.map((data) => {
+                if (data.gender === true) {
+                    data.gender = 'Nam';
+                } else {
+                    data.gender = 'Nữ';
+                }
+                return 1;
+            });
+            setValueFetch(res.data);
+        });
+    };
 
-    const handleDelete = () => {
-        return;
-    };
-    const handleData = () => {
-        axios.get('http://localhost:3000/api/teacher').then((res) => setDataFetch(res.data));
-    };
     return (
         <>
             <Title title="Danh sách giảng viên" />
@@ -101,7 +66,7 @@ function ListTeacher() {
                     <FormGroup as={Col}>
                         <FormLabel>Tra cứu</FormLabel>
                         <br />
-                        <ButtonBootstrap variant="primary" type="submit" onClick={handleData}>
+                        <ButtonBootstrap variant="primary" type="submit" onClick={handleFetchData}>
                             Tra cứu
                         </ButtonBootstrap>
                         <ButtonBootstrap
@@ -119,26 +84,34 @@ function ListTeacher() {
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Họ và Tên</th>
+                                <th scope="col">Giới tính</th>
                                 <th scope="col">Mã giảng viên</th>
                                 <th scope="col">Khoa</th>
                                 <th scope="col">&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Nguyễn Văn A</td>
-                                <td>GV001</td>
-                                <td>Công nghệ thông tin</td>
-                                <td>
-                                    <a className="btn btn-primary btn-sm" href="/">
-                                        <FontAwesomeIcon icon={faPenSquare} />
-                                    </a>
-                                    <Button to={'/students/profile/delete'} danger sm onclick={handleDelete}>
-                                        <FontAwesomeIcon icon={faTrash} />
-                                    </Button>
-                                </td>
-                            </tr>
+                            {valueFetch ? (
+                                valueFetch.map((value, index) => (
+                                    <tr key={index}>
+                                        <th scope="row">{value.id}</th>
+                                        <td>{value.name}</td>
+                                        <td>{value.gender}</td>
+                                        <td>{value.code}</td>
+                                        <td>{value.department}</td>
+                                        <td>
+                                            <Link
+                                                className="btn btn-primary btn-sm"
+                                                to={`/teachers/profile/edit/${value.id}`}
+                                            >
+                                                <FontAwesomeIcon icon={faPenSquare} />
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <></>
+                            )}
                         </tbody>
                     </Table>
                 </Tab>
@@ -181,14 +154,6 @@ function ListTeacher() {
                                                 <a className="btn btn-primary btn-sm" href="/">
                                                     <FontAwesomeIcon icon={faPenSquare} />
                                                 </a>
-                                                <Button
-                                                    to={'/students/profile/delete'}
-                                                    danger
-                                                    sm
-                                                    onclick={handleDelete}
-                                                >
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </Button>
                                             </td>
                                         </tr>
                                     ))}

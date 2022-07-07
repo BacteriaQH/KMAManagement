@@ -1,76 +1,79 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
 const { Form, Row, FormGroup, Col, FormLabel, FormSelect } = require('react-bootstrap');
 
 const Search = ({ showStudentSelect = false, showSubjectSelect = false }) => {
     // showStudentSelect = true;
     // showSubjectSelect = true;
+    const [departments, setDepartments] = useState('');
+    const [classes, setClasses] = useState('');
+    const [courses, setCourses] = useState('');
+    const [classSelect, setClassSelect] = useState('');
+    const [student, setStudent] = useState('');
+    useEffect(() => {
+        axios.post('http://localhost:3000/api/query', ['departments', 'classes', 'courses']).then((res) => {
+            setDepartments(res.data.departments);
+            setClasses(res.data.classes);
+            setCourses(res.data.courses);
+        });
+    }, []);
+    const handleChangeClass = (e) => {
+        setClassSelect(e.target.value);
+    };
+    useEffect(() => {
+        axios
+            .get('http://localhost:3000/api/students/by-class', {
+                params: { classes: classSelect },
+            })
+            .then((res) => {
+                setStudent(res.data);
+            });
+    }, [classSelect]);
     return (
         <>
             <Row>
                 <FormGroup as={Col}>
-                    <FormLabel>Địa điểm</FormLabel>
+                    <FormLabel>Khoa</FormLabel>
                     <FormSelect>
-                        <option>Chọn địa điểm</option>
-                        <option value="1">Ngân hàng 1</option>
-                        <option value="2">Ngân hàng 2</option>
+                        <option>Chọn khoa</option>
+                        {departments ? departments.map((dep) => <option key={dep.id}>{dep.name}</option>) : <></>}
                     </FormSelect>
                 </FormGroup>
                 <FormGroup as={Col}>
                     <FormLabel>Khoá</FormLabel>
                     <FormSelect>
                         <option>Chọn khoá</option>
-                        <option value="1">Ngân hàng 1</option>
-                        <option value="2">Ngân hàng 2</option>
-                        <option value="3">Ngân hàng 3</option>
-                    </FormSelect>
-                </FormGroup>
-                <FormGroup as={Col}>
-                    <FormLabel>Khoa</FormLabel>
-                    <FormSelect>
-                        <option>Chọn khoa</option>
-                        <option value="1">Ngân hàng 1</option>
-                        <option value="2">Ngân hàng 2</option>
-                        <option value="3">Ngân hàng 3</option>
-                    </FormSelect>
-                </FormGroup>
-                <FormGroup as={Col}>
-                    <FormLabel>Ngành</FormLabel>
-                    <FormSelect>
-                        <option>Chọn ngành</option>
-                        <option value="1">Ngân hàng 1</option>
-                        <option value="2">Ngân hàng 2</option>
-                        <option value="3">Ngân hàng 3</option>
+                        {courses ? courses.map((course) => <option key={course.id}>{course.code}</option>) : <></>}
                     </FormSelect>
                 </FormGroup>
             </Row>
             <Row>
                 <FormGroup as={Col}>
                     <FormLabel>Lớp</FormLabel>
-                    <FormSelect>
+                    <FormSelect onChange={handleChangeClass}>
                         <option>Chọn lớp</option>
-                        <option value="1">Ngân hàng 1</option>
-                        <option value="2">Ngân hàng 2</option>
-                        <option value="3">Ngân hàng 3</option>
-                    </FormSelect>
-                </FormGroup>
-                <FormGroup as={Col}>
-                    <FormLabel>Loại</FormLabel>
-                    <FormSelect>
-                        <option>Chọn loại</option>
-                        <option value="1">Ngân hàng 1</option>
-                        <option value="2">Ngân hàng 2</option>
-                        <option value="3">Ngân hàng 3</option>
+                        {classes ? classes.map((c) => <option key={c.id}>{c.name}</option>) : <></>}
                     </FormSelect>
                 </FormGroup>
                 {showStudentSelect && (
-                    <FormGroup as={Col}>
-                        <FormLabel>Học viên</FormLabel>
-                        <FormSelect>
-                            <option>Chọn học viên</option>
-                            <option value="1">Ngân hàng 1</option>
-                            <option value="2">Ngân hàng 2</option>
-                            <option value="3">Ngân hàng 3</option>
-                        </FormSelect>
-                    </FormGroup>
+                    <>
+                        <FormGroup as={Col}>
+                            <FormLabel>Học viên</FormLabel>
+                            <FormSelect>
+                                <option>Chọn học viên</option>
+                                {student ? (
+                                    student.map((std) => (
+                                        <option key={std.id} value={std.id}>
+                                            {std.name}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <></>
+                                )}
+                            </FormSelect>
+                        </FormGroup>
+                    </>
                 )}
                 {showSubjectSelect && (
                     <Row>

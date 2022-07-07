@@ -27,13 +27,19 @@ import AddSubject from '../pages/EducationManagement/SubjectManagement/Add';
 import ListSubject from '../pages/EducationManagement/SubjectManagement/List';
 import SubjectManagement from '../pages/EducationManagement/SubjectManagement';
 import Login from '../pages/Login';
+import ManagementClass from '../pages/EducationManagement/ClassManagement/Management';
+import ScheduleManagement from '../pages/EducationManagement/ScheduleManagement';
+import AddSchedule from '../pages/EducationManagement/ScheduleManagement/AddSchedule';
+import AddTeacherToSchedule from '../pages/EducationManagement/ScheduleManagement/AddTeacherToSchedule';
+import EditSubject from '../pages/EducationManagement/SubjectManagement/Edit';
+import AddClassroom from '../pages/EducationManagement/ScheduleManagement/AddClassroom';
 
 const routes = [
-    { path: '/', component: Home, defaultLayout: true },
     { path: '/login', component: Login, defaultLayout: false },
+    { path: '/', component: Home, defaultLayout: true },
     { path: '/students/profile', component: StudentProfile, defaultLayout: true },
     { path: '/students/profile/add', component: AddStudent, defaultLayout: true },
-    { path: '/students/profile/edit', component: EditStudent, defaultLayout: true }, //no
+    { path: '/students/profile/edit/:id', component: EditStudent, defaultLayout: true },
     { path: '/students/profile/list', component: ListStudent, defaultLayout: true },
 
     { path: '/students/report', component: Report, defaultLayout: true }, // no
@@ -41,7 +47,7 @@ const routes = [
 
     { path: '/teachers/profile', component: TeacherProfile, defaultLayout: true },
     { path: '/teachers/profile/add', component: AddTeacher, defaultLayout: true },
-    { path: '/teachers/profile/edit', component: EditTeacher, defaultLayout: true }, //no
+    { path: '/teachers/profile/edit/:id', component: EditTeacher, defaultLayout: true }, //no
     { path: '/teachers/profile/list', component: ListTeacher, defaultLayout: true },
 
     { path: '/grades', component: GradeManagement, defaultLayout: true },
@@ -50,7 +56,15 @@ const routes = [
 
     { path: '/subjects', component: SubjectManagement, defaultLayout: true },
     { path: '/subjects/add', component: AddSubject, defaultLayout: true },
+    { path: '/subjects/edit/:id', component: EditSubject, defaultLayout: true },
     { path: '/subjects/list', component: ListSubject, defaultLayout: true },
+
+    { path: '/class', component: ManagementClass, defaultLayout: true },
+
+    { path: '/schedule', component: ScheduleManagement, defaultLayout: true },
+    { path: '/schedule/add', component: AddSchedule, defaultLayout: true },
+    { path: '/schedule/add-teachers-to-schedule', component: AddTeacherToSchedule, defaultLayout: true },
+    { path: '/schedule/add-classroom', component: AddClassroom, defaultLayout: true },
 ];
 
 export default routes;

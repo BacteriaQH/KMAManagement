@@ -1,44 +1,82 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { useRef, useState } from 'react';
-import { Col, FormCheck, FormControl, FormGroup, FormLabel, FormSelect, Image, Row } from 'react-bootstrap';
+import { useEffect, useRef, useState } from 'react';
+import { Button, Col, FormCheck, FormControl, FormGroup, FormLabel, FormSelect, Image, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import Title from '../../../../components/Title';
 
 function AddTeacher() {
     const fileRef = useRef();
+    const navigate = useNavigate();
     const [image, setImage] = useState('');
+
+    const [formData, setFormData] = useState({
+        firstname: '',
+        lastname: '',
+        code: '',
+        gender: '',
+        dob: '',
+        department: '',
+        phone: '',
+        email: '',
+    });
+    const [message, setMessage] = useState('');
     const handleChangeFile = async (e) => {
         e.preventDefault();
         const data = new FormData();
         data.append('file', e.target.files[0]);
-        axios.post('http://localhost:3000/api/upload', data, {}).then((res) => {
+        axios.post('http://localhost:3000/api/upload', data).then((res) => {
             setImage(res.data);
+            setFormData({
+                ...formData,
+                [e.target.name]: `http://localhost:3000/${res.data.filename}`,
+            });
+        });
+    };
+    const [department, setDepartment] = useState('');
+    useEffect(() => {
+        axios.post('http://localhost:3000/api/query', ['departments']).then((res) => {
+            setDepartment(res.data.departments);
+        });
+    }, []);
+    const handleChange = (e) => {
+        const value = e.target.value;
+        setFormData({
+            ...formData,
+            [e.target.name]: value,
+        });
+    };
+    const handleClick = (e) => {
+        e.preventDefault();
+        axios.post('http://localhost:3000/api/teachers/add', formData).then((res) => {
+            res.data.code === 200 ? navigate('/teachers/profile/list') : setMessage(res.data.message);
         });
     };
     return (
         <>
             <Title title={'Thêm giảng viên'} />
+            {message ? <div className="text-danger">{message}</div> : <></>}
             <Row className="mb-3">
                 <Col>
                     <FormGroup as={Row} controlId="formFirstName">
                         <FormLabel>Họ đệm</FormLabel>
-                        <FormControl type="text" placeholder="Nhập họ đệm" name="firstName" />
+                        <FormControl type="text" placeholder="Nhập họ đệm" name="firstname" onChange={handleChange} />
                     </FormGroup>
                     <FormGroup as={Row} controlId="formLastName">
                         <FormLabel>Tên</FormLabel>
-                        <FormControl type="text" placeholder="Nhập tên" name="lastName" />
+                        <FormControl type="text" placeholder="Nhập tên" name="lastname" onChange={handleChange} />
                     </FormGroup>
                 </Col>
                 <Col className="d-flex justify-content-center">
                     {image ? (
                         <>
                             <Image
-                                src={`http://localhost:3000/api/${image.filename}`}
+                                src={`http://localhost:3000/${image.filename}`}
                                 alt={image.filename}
                                 height={'150px'}
                             />
-                            <input type={'hidden'} value={`http://localhost:3000/api/${image.filename}`} name="image" />
+                            <input type={'hidden'} value={`http://localhost:3000/${image.filename}`} name="image" />
                         </>
                     ) : (
                         <FormGroup className="d-flex justify-content-center">
@@ -54,6 +92,7 @@ function AddTeacher() {
                                 accept="image/*"
                                 className="d-none"
                                 onChange={handleChangeFile}
+                                name="image"
                             />
                         </FormGroup>
                     )}
@@ -62,39 +101,55 @@ function AddTeacher() {
             <Row className="mb-3">
                 <FormGroup as={Col} controlId="formStudentId">
                     <FormLabel>Mã giảng viên</FormLabel>
-                    <FormControl type="text" placeholder="Nhập mã giảng viên" name="code" />
+                    <FormControl type="text" placeholder="Nhập mã giảng viên" name="code" onChange={handleChange} />
                 </FormGroup>
                 <FormGroup as={Col} controlId="formGender">
                     <FormLabel>Giới tính</FormLabel>{' '}
-                    <FormCheck name="gender" type={'radio'} id={'male'} label={'Nam'} defaultChecked value={1} />
-                    <FormCheck name="gender" type={'radio'} id={'female'} label={'Nữ'} value={0} />
+                    <FormCheck
+                        name="gender"
+                        type={'radio'}
+                        id={'male'}
+                        label={'Nam'}
+                        defaultChecked
+                        value={1}
+                        onChange={handleChange}
+                    />
+                    <FormCheck
+                        name="gender"
+                        type={'radio'}
+                        id={'female'}
+                        label={'Nữ'}
+                        value={0}
+                        onChange={handleChange}
+                    />
                 </FormGroup>
             </Row>
             <Row>
                 <FormGroup as={Col}>
                     <FormLabel>Khoa</FormLabel>
-                    <FormSelect name="department">
+                    <FormSelect name="department" onChange={handleChange}>
                         <option>Chọn khoa</option>
-                        <option value="1">Ngân hàng 1</option>
-                        <option value="2">Ngân hàng 2</option>
-                        <option value="3">Ngân hàng 3</option>
+                        {department ? department.map((dep) => <option key={dep.id}>{dep.name}</option>) : <></>}
                     </FormSelect>
                 </FormGroup>
                 <FormGroup as={Col} controlId="formPhoneNumber">
                     <FormLabel>Số điện thoại</FormLabel>
-                    <FormControl type="text" placeholder="Nhập số điện thoại" name="phone" />
+                    <FormControl type="text" placeholder="Nhập số điện thoại" name="phone" onChange={handleChange} />
                 </FormGroup>
             </Row>
             <Row>
                 <FormGroup as={Col}>
                     <FormLabel>Ngày sinh</FormLabel>
-                    <FormControl type="date" name="dob" />
+                    <FormControl type="date" name="dob" onChange={handleChange} />
                 </FormGroup>
                 <FormGroup as={Col} controlId="formPhoneNumber">
                     <FormLabel>Email</FormLabel>
-                    <FormControl type="email" placeholder="Nhập email" name="email" />
+                    <FormControl type="email" placeholder="Nhập email" name="email" onChange={handleChange} />
                 </FormGroup>
             </Row>
+            <Button className="btn btn-primary mt-3" onClick={handleClick}>
+                Thêm Giảng viên
+            </Button>
         </>
     );
 }

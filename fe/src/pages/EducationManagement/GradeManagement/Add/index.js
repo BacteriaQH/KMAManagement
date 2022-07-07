@@ -1,53 +1,198 @@
-import { Col, Form, FormGroup, FormLabel, FormSelect, Row, Button } from 'react-bootstrap';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { Col, FormGroup, FormLabel, FormSelect, Row, Button, Table, FormControl } from 'react-bootstrap';
 import Title from '~/components/Title';
 
 function AddGrade() {
+    const [classes, setClasses] = useState('');
+    const [classSelect, setClassSelect] = useState('');
+    const [subjects, setSubjects] = useState('');
+    const [students, setStudents] = useState('');
+    const [dataP, setDataP] = useState([]);
+    const [idArr, setIdArr] = useState([]);
+    const [subSubmit, setSubSubmit] = useState('');
+    const [message, setMessage] = useState({
+        err: false,
+        mess: '',
+    });
+    useEffect(() => {
+        axios.post('http://localhost:3000/api/query', ['classes']).then((res) => {
+            setClasses(res.data.classes);
+        });
+    }, []);
+    useEffect(() => {
+        axios.get('http://localhost:3000/api/subjects/list').then((res) => {
+            setSubjects(res.data);
+        });
+    }, []);
+    const handleChangeClass = (e) => {
+        setClassSelect(e.target.value);
+    };
+
+    const handleFetchData = () => {
+        axios
+            .get('http://localhost:3000/api/students/by-class', {
+                params: { classes: classSelect },
+            })
+            .then((res) => {
+                setStudents(res.data);
+                const d = [];
+                const id = [];
+                res.data.map((data) => {
+                    const st = { id: data.id };
+                    d.push(st);
+                    id.push(data.id);
+                });
+                setDataP(d);
+                setIdArr(id);
+            });
+    };
+
+    const handleChange = (e, id) => {
+        for (let x in dataP) {
+            if (id === dataP[x].id) {
+                setDataP([
+                    ...dataP,
+                    {
+                        ...dataP[x],
+                        id: id,
+                        [e.target.name]: e.target.value,
+                        subject: subSubmit,
+                        class: classSelect,
+                    },
+                ]);
+            }
+        }
+    };
+    const handleChangeSubject = (e) => {
+        setSubSubmit(e.target.value);
+    };
+    const handleClick = () => {
+        const data = [];
+        idArr.map((id) => {
+            let lastElement = dataP.findLast((item) => item.id === id);
+            data.push(lastElement);
+        });
+        console.log(data);
+        axios.post('http://localhost:3000/api/grades/add', data).then((res) => {
+            setMessage({
+                err: res.data.code === 200 ? false : true,
+                mess: res.data.message,
+            });
+        });
+    };
     return (
         <>
             <Title title="Thêm điểm" />
-            <Form>
-                <Row>
-                    <FormGroup as={Col}>
-                        <FormLabel>Năm học</FormLabel>
-                        <FormSelect>
-                            <option>Chọn năm học</option>
-                            <option value="1">Ngân hàng 1</option>
-                            <option value="2">Ngân hàng 2</option>
-                        </FormSelect>
-                    </FormGroup>
-                    <FormGroup as={Col}>
-                        <FormLabel>Kỳ học</FormLabel>
-                        <FormSelect>
-                            <option>Chọn kỳ học</option>
-                            <option value="1">Ngân hàng 1</option>
-                            <option value="2">Ngân hàng 2</option>
-                            <option value="3">Ngân hàng 3</option>
-                        </FormSelect>
-                    </FormGroup>
-                    <FormGroup as={Col}>
-                        <FormLabel>Học phần</FormLabel>
-                        <FormSelect>
-                            <option>Chọn học phần</option>
-                            <option value="1">Ngân hàng 1</option>
-                            <option value="2">Ngân hàng 2</option>
-                            <option value="3">Ngân hàng 3</option>
-                        </FormSelect>
-                    </FormGroup>
-                    <FormGroup as={Col}>
-                        <FormLabel>Lớp</FormLabel>
-                        <FormSelect>
-                            <option>Chọn lớp</option>
-                            <option value="1">Ngân hàng 1</option>
-                            <option value="2">Ngân hàng 2</option>
-                            <option value="3">Ngân hàng 3</option>
-                        </FormSelect>
-                    </FormGroup>
-                </Row>
-                <Button variant="primary" type="submit" className="m-3">
-                    {' '}
-                    Lấy danh sách học viên
-                </Button>
-            </Form>
+            {message.mess ? <div className={message.err ? 'text-danger' : 'text-success'}>{message.mess}</div> : <></>}
+            <Row>
+                <FormGroup as={Col}>
+                    <FormLabel>Học phần</FormLabel>
+                    <FormSelect onChange={handleChangeSubject}>
+                        <option>Chọn học phần</option>
+                        {subjects ? (
+                            subjects.map((subject) => (
+                                <option value={subject.id} key={subject.id}>
+                                    {subject.name}
+                                </option>
+                            ))
+                        ) : (
+                            <></>
+                        )}
+                    </FormSelect>
+                </FormGroup>
+                <FormGroup as={Col}>
+                    <FormLabel>Lớp</FormLabel>
+                    <FormSelect onChange={handleChangeClass}>
+                        <option>Chọn lớp</option>
+                        {classes ? (
+                            classes.map((nClass, index) => <option key={nClass.id}>{nClass.name}</option>)
+                        ) : (
+                            <></>
+                        )}
+                    </FormSelect>
+                </FormGroup>
+            </Row>
+            <Button variant="primary" onClick={handleFetchData} className="m-3">
+                {' '}
+                Lấy danh sách học viên
+            </Button>
+            <Table striped hover>
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Họ và Tên</th>
+                        <th scope="col">Mã Sinh Viên</th>
+                        <th scope="col" width="80px">
+                            TP1
+                        </th>
+                        <th scope="col" width="80px">
+                            TP2
+                        </th>
+                        <th scope="col" width="80px">
+                            Thi L1
+                        </th>
+                        <th scope="col" width="80px">
+                            Thi L2
+                        </th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {students ? (
+                        students.map((student, index) => {
+                            return (
+                                <tr key={student.id}>
+                                    <th scope="row">{++index}</th>
+                                    <td>{student.name}</td>
+                                    <td>{student.code}</td>
+                                    <td>
+                                        <FormControl
+                                            type="number"
+                                            name="grade1"
+                                            min={0}
+                                            max={10}
+                                            onChange={(e) => handleChange(e, student.id)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <FormControl
+                                            type="number"
+                                            name="grade2"
+                                            min={0}
+                                            max={10}
+                                            onChange={(e) => handleChange(e, student.id)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <FormControl
+                                            type="number"
+                                            name="first_exam"
+                                            min={0}
+                                            max={10}
+                                            onChange={(e) => handleChange(e, student.id)}
+                                        />
+                                    </td>
+                                    <td>
+                                        <FormControl
+                                            type="number"
+                                            name="second_exam"
+                                            min={0}
+                                            max={10}
+                                            onChange={(e) => handleChange(e, student.id)}
+                                        />
+                                    </td>
+                                </tr>
+                            );
+                        })
+                    ) : (
+                        <></>
+                    )}
+                </tbody>
+            </Table>
+            <Button onClick={handleClick} className="btn btn-primary mt-3">
+                Thêm điểm
+            </Button>
         </>
     );
 }
