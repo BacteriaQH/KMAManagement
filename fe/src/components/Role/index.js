@@ -9,8 +9,8 @@ import { faCircleChevronDown } from '@fortawesome/free-solid-svg-icons';
 const Dropdown = () => {
     return (
         <span className="d-flex flex-column bg-light border rounded-3">
-            <Button to="/setting">Cài đặt</Button>
-            <Button to="/logout">Đăng xuất</Button>
+            <Button to="/home">Cài đặt</Button>
+            <Button to="/login">Đăng xuất</Button>
         </span>
     );
 };

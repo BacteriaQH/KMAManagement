@@ -14,10 +14,10 @@ const LoginController = async (req, res) => {
             const accessToken = jwt.sign(
                 {
                     id: user.id,
-                    roleid: user.roleid,
+                    role_symbol: user.role_symbol,
                 },
-                process.env.JWT_KEY,
-                { expiresIn: '3d' },
+                process.env.JWT_ACCESS_KEY,
+                { expiresIn: '1d' },
             );
             const { password, ...others } = user;
             res.send({

@@ -1,26 +1,33 @@
 import { Col, Row } from 'react-bootstrap';
 import Button from '../../../components/Button';
 import Title from '../../../components/Title';
-
+import { useSelector } from 'react-redux';
 function TeacherProfile() {
+    const user = useSelector((state) => state.auth.login?.currentUser?.result);
     return (
         <>
             <Title title={'Quản lý giảng viên'} />
-            <Row>
-                <Col>
-                    <Button to={'/teachers/profile/add'} primary>
-                        Thêm giảng viên
+            {user.role_symbol === '3' ? (
+                <>
+                    {' '}
+                    <Button to={`/teachers/profile/edit/${user.id}`} primary>
+                        Chỉnh sửa giảng viên
                     </Button>
-                </Col>
-                <Col>
-                    <Button to={'/teachers/profile/list'} primary>
-                        Danh sách giảng viên
-                    </Button>
-                </Col>
-            </Row>
-            <Row>
-                <Col></Col>
-            </Row>
+                </>
+            ) : (
+                <Row>
+                    <Col>
+                        <Button to={'/teachers/profile/add'} primary>
+                            Thêm giảng viên
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Button to={'/teachers/profile/list'} primary>
+                            Danh sách giảng viên
+                        </Button>
+                    </Col>
+                </Row>
+            )}
         </>
     );
 }

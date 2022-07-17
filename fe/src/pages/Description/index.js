@@ -10,12 +10,12 @@ function Description() {
                 <Col lg={3}>
                     <Row>
                         <Col lg={3}>
-                            <Link to={'/'}>
+                            <Link to={'/home'}>
                                 <Image isLogo alt={'logo'} />
                             </Link>
                         </Col>
                         <Col lg={9} className="d-flex justify-content-center align-items-center">
-                            <Link to={'/'}>
+                            <Link to={'/home'}>
                                 <h5 className="text-primary navbar-brand-name fw-bold">Quản Lý Sinh Viên</h5>
                             </Link>
                         </Col>
@@ -44,7 +44,7 @@ function Description() {
                         <tbody>
                             <tr>
                                 <td>admin01@lch.com</td>
-                                <td>admin</td>
+                                <td>admin01</td>
                                 <td>Admin</td>
                                 <td>Tất cả</td>
                             </tr>

@@ -2,10 +2,35 @@ import SidebarMenu from 'react-bootstrap-sidebar-menu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { hasChildren } from './utils';
-import { menu } from './menu';
+import { adminMenu, studentMenu, teacherMenu, department1Menu, department2Menu, department3Menu } from './menu';
 import Button from '../Button';
-
+import { useSelector } from 'react-redux';
 const Sidebar = () => {
+    const role = useSelector((state) => state.auth.login.currentUser.result.role_symbol);
+    let menu = [];
+    switch (Number.parseInt(role)) {
+        case 1:
+            menu = adminMenu;
+            break;
+        case 2:
+            menu = studentMenu;
+            break;
+        case 3:
+            menu = teacherMenu;
+            break;
+        case 4:
+            menu = department1Menu;
+            break;
+        case 5:
+            menu = department2Menu;
+            break;
+        case 6:
+            menu = department3Menu;
+            break;
+
+        default:
+            break;
+    }
     return (
         <SidebarMenu>
             <SidebarMenu.Body>

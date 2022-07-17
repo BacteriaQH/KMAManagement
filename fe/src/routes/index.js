@@ -36,6 +36,7 @@ import AddClassroom from '../pages/EducationManagement/ScheduleManagement/AddCla
 import Description from '../pages/Description';
 import Authorization from '../pages/Others/Authorization';
 import Others from '../pages/Others';
+import FindGradeStudent from '../pages/EducationManagement/GradeManagement/FindGradeStudent';
 
 const adminRoutes = [
     { path: '/login', component: Login, defaultLayout: false },
@@ -57,6 +58,7 @@ const adminRoutes = [
     { path: '/grades', component: GradeManagement, defaultLayout: true },
     { path: '/grades/add', component: AddGrade, defaultLayout: true },
     { path: '/grades/find', component: FindGrade, defaultLayout: true },
+    { path: '/grades/find/:id', component: FindGradeStudent, defaultLayout: true },
 
     { path: '/subjects', component: SubjectManagement, defaultLayout: true },
     { path: '/subjects/add', component: AddSubject, defaultLayout: true },
