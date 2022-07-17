@@ -364,3 +364,16 @@ module.exports.addTeacherToClassroom = async (data) => {
         return false;
     }
 };
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------- ROLE ---------------------------------------------------//
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+module.exports.listRoles = async () => {
+    try {
+        const qRoles = await db.Roles.findAll();
+        return qRoles;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+};

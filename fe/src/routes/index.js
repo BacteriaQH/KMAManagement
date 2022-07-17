@@ -34,6 +34,8 @@ import AddTeacherToSchedule from '../pages/EducationManagement/ScheduleManagemen
 import EditSubject from '../pages/EducationManagement/SubjectManagement/Edit';
 import AddClassroom from '../pages/EducationManagement/ScheduleManagement/AddClassroom';
 import Description from '../pages/Description';
+import Authorization from '../pages/Others/Authorization';
+import Others from '../pages/Others';
 
 const adminRoutes = [
     { path: '/login', component: Login, defaultLayout: false },
@@ -67,6 +69,9 @@ const adminRoutes = [
     { path: '/schedule/add', component: AddSchedule, defaultLayout: true },
     { path: '/schedule/add-teachers-to-schedule', component: AddTeacherToSchedule, defaultLayout: true },
     { path: '/schedule/add-classroom', component: AddClassroom, defaultLayout: true },
+
+    { path: '/others', component: Others, defaultLayout: true },
+    { path: '/others/authorization', component: Authorization, defaultLayout: true },
 ];
 const routes = {
     adminRoutes,

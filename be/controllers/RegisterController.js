@@ -7,7 +7,9 @@ const RegisterController = async (req, res) => {
         body.id = generateUID(20);
         body.password = await hashPassword(body.password);
         const result = await createUser(body);
-        result ? res.status(200).json('Register success') : res.status(404).json('Error');
+        result
+            ? res.status(200).json({ code: 200, message: 'Register success' })
+            : res.status(404).json({ code: 404, message: 'Error' });
     } catch (err) {
         console.log(err);
     }

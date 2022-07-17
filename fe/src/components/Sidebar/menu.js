@@ -75,9 +75,9 @@ export const menu = [
                 to: '/',
             },
             {
-                title: 'Khác *',
+                title: 'Khác ',
                 icon: faAsterisk,
-                to: '/',
+                to: '/others',
             },
         ],
     },

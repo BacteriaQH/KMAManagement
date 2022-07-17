@@ -10,6 +10,7 @@ const ClassController = require('../controllers/ClassController');
 const SemesterController = require('../controllers/SemesterController');
 const GradeController = require('../controllers/GradeController');
 const ClassroomController = require('../controllers/ClassroomController');
+const RoleController = require('../controllers/RoleController');
 const UploadController = require('../controllers/UploadController');
 
 const initWebRoutes = (app) => {
@@ -49,6 +50,8 @@ const initWebRoutes = (app) => {
     router.post('/classrooms/count', ClassroomController.CountClassroom);
     router.post('/classrooms/find', ClassroomController.FindClassroom);
     router.post('/classrooms/add-teacher-id', ClassroomController.AddTeacherToClassroom);
+
+    router.get('/roles/list', RoleController.ListRoles);
 
     router.post('/query', QueryController);
     return app.use('/api', router);
