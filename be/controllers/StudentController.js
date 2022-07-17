@@ -21,27 +21,19 @@ const AddStudent = async (req, res) => {
 };
 const ListStudent = async (req, res) => {
     const students = await listStudent();
-    const std = [];
-    students.map((student) => {
-        std.push({
-            id: student.dataValues.id,
-            code: student.dataValues.code,
-            name: student.dataValues.name,
-            gender: student.dataValues.gender,
-            class: student.dataValues.class,
-        });
-    });
-    res.status(200).send(std);
+    delete students.createdAt;
+    delete students.updatedAt;
+    res.status(200).send(students);
 };
 const ListStudentNoClass = async (req, res) => {
     const students = await listStudentNoClass();
     const std = [];
     students.map((student) => {
         std.push({
-            id: student.dataValues.id,
-            code: student.dataValues.code,
-            name: student.dataValues.name,
-            gender: student.dataValues.gender,
+            id: student.id,
+            code: student.code,
+            name: student.name,
+            gender: student.gender,
         });
     });
     res.status(200).send(std);
@@ -72,7 +64,7 @@ const UpdateClassStudent = async (req, res) => {
 const GetStudentById = async (req, res) => {
     const id = req.query.id;
     const student = await getStudentById(id);
-    res.status(200).send(student[0].dataValues);
+    res.status(200).send(student[0]);
 };
 const ListStudentByClass = async (req, res) => {
     const qClass = req.query.classes;
@@ -86,11 +78,11 @@ const ListStudentByClass = async (req, res) => {
     const std = [];
     students.map((student) => {
         std.push({
-            id: student.dataValues.id,
-            code: student.dataValues.code,
-            name: student.dataValues.name,
-            gender: student.dataValues.gender,
-            class: student.dataValues.class,
+            id: student.id,
+            code: student.code,
+            name: student.name,
+            gender: student.gender,
+            class: student.class,
         });
     });
     res.status(200).send(std);

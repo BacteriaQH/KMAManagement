@@ -20,7 +20,8 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
-            roleid: {
+            role_id: {
+                defaultValue: '0',
                 type: Sequelize.STRING,
             },
             createdAt: {

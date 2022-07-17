@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Col, FormGroup, FormLabel, FormSelect, Row, Button, Table, FormControl } from 'react-bootstrap';
 import Title from '~/components/Title';
-
 function AddGrade() {
     const [classes, setClasses] = useState('');
     const [classSelect, setClassSelect] = useState('');
@@ -42,6 +41,7 @@ function AddGrade() {
                     const st = { id: data.id };
                     d.push(st);
                     id.push(data.id);
+                    return 0;
                 });
                 setDataP(d);
                 setIdArr(id);
@@ -72,6 +72,7 @@ function AddGrade() {
         idArr.map((id) => {
             let lastElement = dataP.findLast((item) => item.id === id);
             data.push(lastElement);
+            return 0;
         });
         console.log(data);
         axios.post('http://localhost:3000/api/grades/add', data).then((res) => {
@@ -167,7 +168,7 @@ function AddGrade() {
                                     <td>
                                         <FormControl
                                             type="number"
-                                            name="first_exam"
+                                            name="exam1"
                                             min={0}
                                             max={10}
                                             onChange={(e) => handleChange(e, student.id)}
@@ -176,7 +177,7 @@ function AddGrade() {
                                     <td>
                                         <FormControl
                                             type="number"
-                                            name="second_exam"
+                                            name="exam2"
                                             min={0}
                                             max={10}
                                             onChange={(e) => handleChange(e, student.id)}

@@ -14,7 +14,7 @@ const LoginController = async (req, res) => {
             const accessToken = jwt.sign(
                 {
                     id: user.id,
-                    rolid: user.roleid,
+                    roleid: user.roleid,
                 },
                 process.env.JWT_KEY,
                 { expiresIn: '3d' },

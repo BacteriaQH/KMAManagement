@@ -23,6 +23,8 @@ function ManagementClass() {
         course: '',
         class_number: '',
     });
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleChange = (e) => {
         const value = e.target.value;
         setFormData({

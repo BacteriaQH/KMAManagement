@@ -13,7 +13,7 @@ const AddClassroom = async (req, res) => {
     // get last char array of classroom's code\\
     const classrooms = [];
     qClassrooms.map((clr) => {
-        classrooms.push(clr.dataValues.code);
+        classrooms.push(clr.code);
     });
     const lastChar = [];
     for (let i of classrooms) {
@@ -58,11 +58,8 @@ const FindClassroom = async (req, res) => {
         subject_id: body.subject,
     };
     const qClassroom = await getClassroomByCourse(dataQ);
-    const result = [];
-    qClassroom.map((clr) => {
-        result.push(clr.dataValues);
-    });
-    res.status(200).send(result);
+
+    res.status(200).send(qClassroom);
 };
 const AddTeacherToClassroom = async (req, res) => {
     const body = req.body;

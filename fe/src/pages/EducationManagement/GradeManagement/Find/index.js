@@ -16,6 +16,7 @@ import {
 import * as xlsx from 'xlsx';
 import Search from '~/components/Search';
 import Title from '~/components/Title';
+import Loading from '~/components/Loading';
 
 function FindGrade() {
     const [showExcel, setShowExcel] = useState(false);
@@ -27,7 +28,7 @@ function FindGrade() {
     const [studentSelect, setStudentSelect] = useState('');
     const [grade, setGrade] = useState([]);
     const [studentID, setStudentID] = useState('');
-    const [subjectID, setSubjectID] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const valueFetch = false;
 
     const fileRef = useRef();
@@ -51,26 +52,31 @@ function FindGrade() {
         reader.readAsBinaryString(file);
     };
     useEffect(() => {
+        setIsLoading(true);
         axios.post('http://localhost:3000/api/query', ['classes']).then((res) => {
             setClasses(res.data.classes);
+            setIsLoading(false);
         });
     }, []);
     const handleChangeClass = (e) => {
         setClassSelect(e.target.value);
     };
     useEffect(() => {
+        setIsLoading(true);
         axios
             .get('http://localhost:3000/api/students/by-class', {
                 params: { classes: classSelect },
             })
             .then((res) => {
                 setStudent(res.data);
+                setIsLoading(false);
             });
     }, [classSelect]);
     const handleChangeStudent = (e) => {
         setStudentSelect(e.target.value);
     };
     const handleClickToFindGrade = () => {
+        setIsLoading(true);
         axios
             .get('http://localhost:3000/api/grade/find-grade-by-student-id', {
                 params: { student_id: studentSelect },
@@ -84,30 +90,26 @@ function FindGrade() {
             })
             .then((res) => {
                 setStudentID([res.data]);
+                setIsLoading(false);
             });
     };
 
-    useEffect(() => {
-        let arr = [];
-        grade.map((grd) => {
-            axios
-                .get('http://localhost:3000/api/subjects/id', {
-                    params: {
-                        id: grd.subject_id,
-                    },
-                })
-                .then((res) => {
-                    arr.push(res.data);
-                    setSubjectID(arr);
-                });
-            return 1;
-        });
-    }, [grade]);
     return (
         <>
             <Title title={'Tra cứu điểm'} />
             <Tabs defaultActiveKey={'find'} transition className="m-3">
                 <Tab eventKey={'find'} title="Tra cứu điểm">
+                    {isLoading ? (
+                        <Row>
+                            <Col></Col>
+                            <Col>
+                                <Loading />
+                            </Col>{' '}
+                            <Col></Col>
+                        </Row>
+                    ) : (
+                        <></>
+                    )}
                     <Row>
                         <FormGroup as={Col}>
                             <FormLabel>Lớp</FormLabel>
@@ -151,86 +153,92 @@ function FindGrade() {
                             Xuất excel
                         </ButtonBootstrap>
                     </FormGroup>
-                    <div className="scroll">
-                        <Table striped hover bordered className="text-center table-responsive">
-                            <thead>
-                                <tr>
-                                    <th colSpan="4" scope="colgroup">
-                                        Học viên
-                                    </th>
-                                    {subjectID ? (
-                                        subjectID.map((sbj, index) => (
-                                            <th colSpan="5" scope="colgroup" key={index}>
-                                                {sbj.name}
-                                            </th>
-                                        ))
-                                    ) : (
-                                        <></>
-                                    )}
-                                </tr>
-                                <tr>
-                                    <td>STT</td>
-                                    <td>Mã học viên</td>
-                                    <td>Họ và Tên</td>
-                                    <td>Lớp</td>
-                                    {subjectID ? (
-                                        subjectID.map((sbj, index) => {
-                                            return (
+                    {studentID ? (
+                        <div className="scroll">
+                            <Table striped hover bordered className="text-center table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th colSpan="4" scope="colgroup">
+                                            Học viên
+                                        </th>
+                                        {grade ? (
+                                            grade.map((sbj, index) => (
+                                                <th colSpan="5" scope="colgroup" key={index}>
+                                                    {sbj.name}
+                                                </th>
+                                            ))
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </tr>
+                                    <tr>
+                                        <td>STT</td>
+                                        <td>MSV</td>
+                                        <td style={{ width: '100px' }}>Họ Tên</td>
+                                        <td>Lớp</td>
+                                        {grade ? (
+                                            grade.map((sbj, index) => {
+                                                return (
+                                                    <React.Fragment key={index}>
+                                                        <td>TP1</td>
+                                                        <td>TP2</td>
+                                                        <td>THI</td>
+                                                        <td>TKHP</td>
+                                                        <td>Chữ</td>
+                                                    </React.Fragment>
+                                                );
+                                            })
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        {studentID ? (
+                                            studentID.map((std, index) => (
                                                 <React.Fragment key={index}>
-                                                    <td>TP1</td>
-                                                    <td>TP2</td>
-                                                    <td>THI</td>
-                                                    <td>TKHP</td>
-                                                    <td>Chữ</td>
+                                                    <th scope="row">{++index}</th>
+                                                    <th>{std.code}</th>
+                                                    <th>{std.name}</th>
+                                                    <th>{std.class}</th>
                                                 </React.Fragment>
-                                            );
-                                        })
-                                    ) : (
-                                        <></>
-                                    )}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    {studentID ? (
-                                        studentID.map((std, index) => (
-                                            <React.Fragment key={index}>
-                                                <th scope="row">{++index}</th>
-                                                <th>{std.code}</th>
-                                                <th>{std.name}</th>
-                                                <th>{std.class}</th>
-                                            </React.Fragment>
-                                        ))
-                                    ) : (
-                                        <></>
-                                    )}
-                                    {grade ? (
-                                        grade.map((grd, index) => (
-                                            <React.Fragment key={index}>
-                                                <th>{grd.grade1}</th>
-                                                <th>{grd.grade2}</th>
-                                                <th>
-                                                    {grd.second_exam
-                                                        ? `${grd.first_exam}|${grd.second_exam}`
-                                                        : grd.first_exam}
-                                                </th>
-                                                <th>
-                                                    {grd.average2 ? `${grd.average1}|${grd.average2}` : grd.average1}
-                                                </th>
-                                                <th>
-                                                    {grd.second_letter
-                                                        ? `${grd.first_letter}|${grd.second_letter}`
-                                                        : grd.first_letter}
-                                                </th>
-                                            </React.Fragment>
-                                        ))
-                                    ) : (
-                                        <></>
-                                    )}
-                                </tr>
-                            </tbody>
-                        </Table>
-                    </div>
+                                            ))
+                                        ) : (
+                                            <></>
+                                        )}
+                                        {grade ? (
+                                            grade.map((grd, index) => (
+                                                <React.Fragment key={index}>
+                                                    <th>{grd.grade.grade1}</th>
+                                                    <th>{grd.grade.grade2}</th>
+                                                    <th>
+                                                        {grd.grade.exam2
+                                                            ? `${grd.grade.exam1}|${grd.grade.exam2}`
+                                                            : grd.grade.exam1}
+                                                    </th>
+                                                    <th>
+                                                        {grd.grade.average2
+                                                            ? `${grd.grade.average1}|${grd.grade.average2}`
+                                                            : grd.grade.average1}
+                                                    </th>
+                                                    <th>
+                                                        {grd.grade.letter2
+                                                            ? `${grd.grade.letter1}|${grd.grade.letter2}`
+                                                            : grd.grade.letter1}
+                                                    </th>
+                                                </React.Fragment>
+                                            ))
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </tr>
+                                </tbody>
+                            </Table>
+                        </div>
+                    ) : (
+                        <> </>
+                    )}
                 </Tab>
                 <Tab eventKey={'import'} title="Import file excel">
                     <Search showStudentSelect showSubjectSelect />

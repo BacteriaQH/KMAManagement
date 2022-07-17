@@ -14,14 +14,14 @@ const ListSubject = async (req, res) => {
     const subs = [];
     subject.map((sub, index) => {
         subs.push({
-            id: sub.dataValues.id,
-            code: sub.dataValues.code,
-            name: sub.dataValues.name,
-            department: sub.dataValues.department,
-            all: sub.dataValues.all,
-            theory: sub.dataValues.theory,
-            practice: sub.dataValues.practice,
-            exercise: sub.dataValues.exercise,
+            id: sub.id,
+            code: sub.code,
+            name: sub.name,
+            department: sub.department,
+            all: sub.all,
+            theory: sub.theory,
+            practice: sub.practice,
+            exercise: sub.exercise,
         });
     });
     res.status(200).send(subs);
@@ -30,7 +30,7 @@ const ListSubject = async (req, res) => {
 const GetSubjectById = async (req, res) => {
     const id = req.query.id;
     const subject = await getSubjectById(id);
-    res.status(200).send(subject[0].dataValues);
+    res.status(200).send(subject[0]);
 };
 
 const UpdateSubject = async (req, res) => {
@@ -49,9 +49,9 @@ const GetSubjectByDepartment = async (req, res) => {
     const subs = [];
     subject.map((sub, index) => {
         subs.push({
-            id: sub.dataValues.id,
-            code: sub.dataValues.code,
-            name: sub.dataValues.name,
+            id: sub.id,
+            code: sub.code,
+            name: sub.name,
         });
     });
     res.status(200).send(subs);

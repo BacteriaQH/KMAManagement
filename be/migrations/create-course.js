@@ -17,6 +17,9 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.STRING,
             },
+            semester_id: {
+                type: Sequelize.STRING,
+            },
             start_year: {
                 allowNull: false,
                 type: Sequelize.STRING,

@@ -18,14 +18,6 @@ function SubjectManagement() {
                     </Button>
                 </Col>
             </Row>
-            <Row>
-                <Col>
-                    <Button to={'/subjects/edit'} primary>
-                        Chỉnh Sửa môn học
-                    </Button>
-                </Col>
-                <Col></Col>
-            </Row>
         </>
     );
 }

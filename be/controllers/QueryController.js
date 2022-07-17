@@ -7,52 +7,35 @@ const QueryController = async (req, res) => {
         switch (i) {
             case 'departments':
                 const qDepartment = await getDepartment();
-                const departments = [];
-                qDepartment.map((department) => {
-                    departments.push({ id: department.dataValues.id, name: department.dataValues.name });
-                });
-                dataRes.departments = departments;
+                delete qDepartment.createdAt;
+                delete qDepartment.updatedAt;
+                dataRes.departments = qDepartment;
                 break;
 
             case 'classes':
                 const qClass = await getClass();
-                const classes = [];
-                qClass.map((kClass) => {
-                    classes.push({
-                        id: kClass.dataValues.id,
-                        code: kClass.dataValues.code,
-                        name: kClass.dataValues.name,
-                    });
-                });
-                classes.sort(function (a, b) {
+                delete qClass.createdAt;
+                delete qClass.updatedAt;
+
+                qClass.sort(function (a, b) {
                     var x = a.code.toLowerCase();
                     var y = b.code.toLowerCase();
                     return x < y ? -1 : x > y ? 1 : 0;
                 });
-                dataRes.classes = classes;
+                dataRes.classes = qClass;
                 break;
             case 'schoolyears':
                 const qSchoolyear = await getSchoolyear();
-                const schoolyears = [];
-                qSchoolyear.map((schoolyear) => {
-                    schoolyears.push({
-                        id: schoolyear.dataValues.id,
-                        display_name: schoolyear.dataValues.display_name,
-                    });
-                });
-                dataRes.schoolyears = schoolyears;
+                delete qSchoolyear.createdAt;
+                delete qSchoolyear.updatedAt;
+
+                dataRes.schoolyears = qSchoolyear;
                 break;
             case 'courses':
                 const qCourse = await getCourse();
-                const courses = [];
-                qCourse.map((course) => {
-                    courses.push({
-                        id: course.dataValues.id,
-                        code: course.dataValues.code,
-                        name: course.dataValues.name,
-                    });
-                });
-                dataRes.courses = courses;
+                delete qCourse.createdAt;
+                delete qCourse.updatedAt;
+                dataRes.courses = qCourse;
                 break;
             default:
                 res.status(404).send('No content of req.body');

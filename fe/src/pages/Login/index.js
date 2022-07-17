@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Col, Container, Row } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 import Image from '../../components/Image';
@@ -40,11 +40,21 @@ export default function Login() {
         <Container className="Login">
             <Row>
                 <Col lg={3}>
-                    <Image isLogo alt={'logo'} />
+                    <Row>
+                        <Col lg={3}>
+                            <Link to={'/'}>
+                                <Image isLogo alt={'logo'} />
+                            </Link>
+                        </Col>
+                        <Col lg={9} className="d-flex justify-content-center align-items-center">
+                            <Link to={'/'}>
+                                <h5 className="text-primary navbar-brand-name fw-bold">Quản Lý Sinh Viên</h5>
+                            </Link>
+                        </Col>
+                    </Row>
                 </Col>
-                <Col lg={9} className="d-flex justify-content-center align-items-center">
-                    <h5 className="text-primary navbar-brand-name fw-bold">Quản Lý Sinh Viên</h5>
-                </Col>
+                <Col lg={5}></Col>
+                <Col lg={4}></Col>
             </Row>
             <Row>
                 <Col></Col>

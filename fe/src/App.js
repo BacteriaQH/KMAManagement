@@ -7,11 +7,12 @@ import routes from '~/routes';
 import DefaultLayout from './components/DefaultLayout';
 
 function App() {
+    const adminRoutes = routes.adminRoutes;
     return (
         <Router>
             <div className="App">
                 <Routes>
-                    {routes.map((route, index) => {
+                    {adminRoutes.map((route, index) => {
                         const Page = route.component;
                         if (!route.defaultLayout) {
                             return <Route key={index} path={route.path} element={<Page />} />;

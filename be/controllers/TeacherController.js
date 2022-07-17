@@ -16,11 +16,11 @@ const ListTeacher = async (req, res) => {
     const tch = [];
     teachers.map((teacher) => {
         tch.push({
-            id: teacher.dataValues.id,
-            code: teacher.dataValues.code,
-            name: teacher.dataValues.name,
-            gender: teacher.dataValues.gender,
-            department: teacher.dataValues.department,
+            id: teacher.id,
+            code: teacher.code,
+            name: teacher.name,
+            gender: teacher.gender,
+            department: teacher.department,
         });
     });
     res.status(200).send(tch);
@@ -28,7 +28,7 @@ const ListTeacher = async (req, res) => {
 const GetTeacherById = async (req, res) => {
     const id = req.query.id;
     const teacher = await getTeacherById(id);
-    res.status(200).send(teacher[0].dataValues);
+    res.status(200).send(teacher[0]);
 };
 const UpdateTeacher = async (req, res) => {
     const body = req.body;

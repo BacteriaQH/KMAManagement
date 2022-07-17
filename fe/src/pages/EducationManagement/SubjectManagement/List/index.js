@@ -1,6 +1,16 @@
 import { useRef, useState } from 'react';
 
-import { FormGroup, Table, Button as ButtonBootstrap, FormControl, Tabs, Tab, FormLabel, Col } from 'react-bootstrap';
+import {
+    FormGroup,
+    Table,
+    Button as ButtonBootstrap,
+    FormControl,
+    Tabs,
+    Tab,
+    FormLabel,
+    Col,
+    Row,
+} from 'react-bootstrap';
 
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,13 +19,16 @@ import * as xlsx from 'xlsx';
 
 import Title from '~/components/Title';
 import axios from 'axios';
+import Loading from '../../../../components/Loading';
 
 function ListSubject() {
+    const fileRef = useRef();
+
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
     const [excelBodyValue, setExcelBodyValue] = useState([]);
     const [valueFetch, setValueFetch] = useState('');
-    const fileRef = useRef();
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChangeFile = (e) => {
         const file = e.target.files[0];
@@ -36,8 +49,10 @@ function ListSubject() {
         reader.readAsBinaryString(file);
     };
     const handleFetchData = () => {
+        setIsLoading(true);
         axios.get('http://localhost:3000/api/subjects/list').then((res) => {
             setValueFetch(res.data);
+            setIsLoading(false);
         });
     };
     const ExportToExcel = () => {
@@ -53,6 +68,17 @@ function ListSubject() {
             <Title title="Danh sách môn học" />
             <Tabs defaultActiveKey={'list'} transition className="m-3">
                 <Tab eventKey={'list'} title="Danh sách môn học">
+                    {isLoading ? (
+                        <Row>
+                            <Col></Col>
+                            <Col>
+                                <Loading />
+                            </Col>{' '}
+                            <Col></Col>
+                        </Row>
+                    ) : (
+                        <></>
+                    )}
                     <FormGroup as={Col}>
                         <FormLabel>Tra cứu</FormLabel>
                         <br />
@@ -68,44 +94,53 @@ function ListSubject() {
                             Xuất excel
                         </ButtonBootstrap>
                     </FormGroup>
-                    <Table striped hover className="table-responsive">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Tên môn</th>
-                                <th scope="col">Mã môn học</th>
-                                <th scope="col">Khoa</th>
-                                <th scope="col">Tổng số tiết</th>
-                                <th scope="col">Số tiết lý thuyết</th>
-                                <th scope="col">Số tiết thực hành</th>
-                                <th scope="col">Số tiết bài tập</th>
-                                <th scope="col">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {valueFetch ? (
-                                valueFetch.map((value, index) => (
-                                    <tr key={index}>
-                                        <th scope="row">{value.id}</th>
-                                        <td>{value.name}</td>
-                                        <td>{value.code}</td>
-                                        <td>{value.department}</td>
-                                        <td>{value.all}</td>
-                                        <td>{value.theory}</td>
-                                        <td>{value.practice}</td>
-                                        <td>{value.exercise}</td>
-                                        <td>
-                                            <a className="btn btn-primary btn-sm" href={`/subjects/edit/${value.id}`}>
-                                                <FontAwesomeIcon icon={faPenSquare} />
-                                            </a>
-                                        </td>
+                    <div className="scroll">
+                        {valueFetch ? (
+                            <Table striped hover className="table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col" width="200px">
+                                            Tên môn
+                                        </th>
+                                        <th scope="col">MMH</th>
+                                        <th scope="col" width="200px">
+                                            Khoa
+                                        </th>
+                                        <th scope="col">Tổng số tiết</th>
+                                        <th scope="col">Lý thuyết</th>
+                                        <th scope="col">Thực hành</th>
+                                        <th scope="col">Bài tập</th>
+                                        <th scope="col">&nbsp;</th>
                                     </tr>
-                                ))
-                            ) : (
-                                <></>
-                            )}
-                        </tbody>
-                    </Table>
+                                </thead>
+                                <tbody>
+                                    {valueFetch.map((value, index) => (
+                                        <tr key={index}>
+                                            <th scope="row">{++index}</th>
+                                            <td>{value.name}</td>
+                                            <td>{value.code}</td>
+                                            <td>{value.department}</td>
+                                            <td>{value.all}</td>
+                                            <td>{value.theory}</td>
+                                            <td>{value.practice}</td>
+                                            <td>{value.exercise}</td>
+                                            <td>
+                                                <a
+                                                    className="btn btn-primary btn-sm"
+                                                    href={`/subjects/edit/${value.id}`}
+                                                >
+                                                    <FontAwesomeIcon icon={faPenSquare} />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        ) : (
+                            <></>
+                        )}
+                    </div>
                 </Tab>
                 <Tab eventKey={'import'} title="Import file excel">
                     <FormGroup>

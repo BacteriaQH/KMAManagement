@@ -7,7 +7,7 @@ const AddClass = async (req, res) => {
     const qClasses = await getClassByCourse(body.course);
     const classes = [];
     qClasses.map((kClass) => {
-        classes.push(kClass.dataValues.code);
+        classes.push(kClass.code);
     });
     // get last char array of class's code\\
     const lastChar = [];

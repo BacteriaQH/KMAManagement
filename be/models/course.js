@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         {
             code: DataTypes.STRING,
             department_id: DataTypes.STRING,
+            semester_id: DataTypes.STRING,
             start_year: DataTypes.STRING,
             end_year: DataTypes.STRING,
         },

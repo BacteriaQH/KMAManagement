@@ -4,15 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { hasChildren } from './utils';
 import { menu } from './menu';
 import Button from '../Button';
-import Role from '../Role';
 
 const Sidebar = () => {
-    const user = JSON.parse(localStorage.getItem('user'));
     return (
         <SidebarMenu>
-            <SidebarMenu.Header>
-                <Role name={user.name} role={user.roleid} />
-            </SidebarMenu.Header>
             <SidebarMenu.Body>
                 {menu.map((subMenu, index) => (
                     <MenuItem item={subMenu} key={index} />

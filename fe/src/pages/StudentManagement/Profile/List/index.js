@@ -22,6 +22,7 @@ import Title from '~/components/Title';
 import Search from '~/components/Search';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Loading from '../../../../components/Loading';
 
 function ListStudent() {
     const [showExcel, setShowExcel] = useState(false);
@@ -33,6 +34,7 @@ function ListStudent() {
     const [classes, setClasses] = useState('');
     const [courses, setCourses] = useState('');
     const [classSelect, setClassesSelect] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const handleChangeFile = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -52,14 +54,17 @@ function ListStudent() {
         reader.readAsBinaryString(file);
     };
     useEffect(() => {
+        setIsLoading(true);
         axios.post('http://localhost:3000/api/query', ['departments', 'classes', 'courses']).then((res) => {
             setDepartments(res.data.departments);
             setClasses(res.data.classes);
             setCourses(res.data.courses);
+            setIsLoading(false);
         });
     }, []);
 
     const handleFetchData = () => {
+        setIsLoading(true);
         axios
             .get('http://localhost:3000/api/students/by-class', {
                 params: { classes: classSelect },
@@ -74,6 +79,7 @@ function ListStudent() {
                     return true;
                 });
                 setValueFetch(res.data);
+                setIsLoading(false);
             });
     };
     const handleChange = (e) => {
@@ -93,6 +99,17 @@ function ListStudent() {
             <Title title="Danh sách học viên" />
             <Tabs defaultActiveKey={'list'} transition className="m-3">
                 <Tab eventKey={'list'} title="Danh sách học viên">
+                    {isLoading ? (
+                        <Row>
+                            <Col></Col>
+                            <Col>
+                                <Loading />
+                            </Col>{' '}
+                            <Col></Col>
+                        </Row>
+                    ) : (
+                        <></>
+                    )}
                     <Row>
                         <FormGroup as={Col}>
                             <FormLabel>Khoa</FormLabel>

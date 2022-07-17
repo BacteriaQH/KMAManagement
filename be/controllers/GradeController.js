@@ -1,5 +1,5 @@
 const { generateUID } = require('../services/generateUID');
-const { addGrade, findGradeByStudentID } = require('../services/CRUD');
+const { addGrade, findGradeByStudentID, getStudentById, getSubjectById } = require('../services/CRUD');
 const { calculateAvgGrade, calculateLetterGrade } = require('../services/calculateGrade');
 const AddGrade = async (req, res) => {
     const body = req.body;
@@ -39,15 +39,28 @@ const AddGrade = async (req, res) => {
         : res.status(200).json({ code: 200, message: 'Add grade success' });
 };
 const FindGradeByStudentID = async (req, res) => {
-    const id = req.query.student_id;
-    const gradeQ = await findGradeByStudentID(id);
-    const gradeR = [];
-    gradeQ.map((grade) => {
-        const { createdAt, updatedAt, ...other } = grade.dataValues;
-        gradeR.push(other);
-    });
-    res.status(200).send(gradeR);
+    const rId = req.query.student_id;
+    const gradeQ = await findGradeByStudentID(rId);
+    const subjects = [];
+    for (let g of gradeQ) {
+        const subject = await getSubjectById(g.subject_id);
+        const grade = {
+            grade1: g.grade1,
+            grade2: g.grade2,
+            exam1: g.exam1,
+            average1: g.average1,
+            letter1: g.letter1,
+            exam2: g.exam2,
+            average2: g.average2,
+            letter2: g.letter2,
+        };
+        subject[0].grade = grade;
+        subjects.push(subject[0]);
+    }
+
+    res.status(200).send(subjects);
 };
+
 module.exports = {
     AddGrade,
     FindGradeByStudentID,

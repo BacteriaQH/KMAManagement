@@ -19,7 +19,7 @@ module.exports.findUser = async (body) => {
                 email: body.email,
             },
         });
-        return user.dataValues;
+        return user;
     } catch (err) {
         console.log(err);
     }

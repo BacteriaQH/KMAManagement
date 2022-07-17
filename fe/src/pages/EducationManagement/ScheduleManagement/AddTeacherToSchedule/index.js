@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Col, FormGroup, FormLabel, FormSelect, Row, Table } from 'react-bootstrap';
+import Loading from '../../../../components/Loading';
 import Title from '../../../../components/Title';
 
 const AddTeacherToSchedule = () => {
@@ -21,15 +22,19 @@ const AddTeacherToSchedule = () => {
         err: false,
         mess: '',
     });
+    const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
+        setIsLoading(true);
         axios.post('http://localhost:3000/api/query', ['courses']).then((res) => {
             setCourses(res.data.courses);
         });
         axios.get('http://localhost:3000/api/teachers/list').then((res) => {
             setTeachers(res.data);
+            setIsLoading(false);
         });
     }, []);
     const handleChange = (e) => {
+        setIsLoading(true);
         setDataSend({
             ...dataSend,
             course: e.target.value,
@@ -40,6 +45,7 @@ const AddTeacherToSchedule = () => {
             })
             .then((res) => {
                 setSemesters(res.data);
+                setIsLoading(false);
             });
     };
     const handleShowData = (e) => {
@@ -56,6 +62,7 @@ const AddTeacherToSchedule = () => {
         });
     };
     useEffect(() => {
+        setIsLoading(true);
         axios
             .all(subjects.map((sub) => axios.get('http://localhost:3000/api/subjects/id', { params: { id: sub } })))
             .then((res) => {
@@ -65,6 +72,7 @@ const AddTeacherToSchedule = () => {
                     return 1;
                 });
                 setSubjectsDetail(rSub);
+                setIsLoading(false);
             });
     }, [subjects]);
     const handleSelectSubject = (e) => {
@@ -74,6 +82,7 @@ const AddTeacherToSchedule = () => {
         });
     };
     const handleFetchData = () => {
+        setIsLoading(true);
         axios.post('http://localhost:3000/api/classrooms/find', dataSend).then((res) => {
             setClassrooms(res.data);
             const arr = [];
@@ -81,9 +90,11 @@ const AddTeacherToSchedule = () => {
             res.data.map((r) => {
                 arr.push({ id: r.id });
                 idArr.push(r.id);
+                return 0;
             });
             setDataPost(arr);
             setIdArray(idArr);
+            setIsLoading(false);
         });
     };
     const handleSelectTeacher = (e, id) => {
@@ -101,10 +112,12 @@ const AddTeacherToSchedule = () => {
         }
     };
     const handleAddTeacher = () => {
+        setIsLoading(true);
         const data = [];
         idArray.map((id) => {
             let lastElement = dataPost.findLast((item) => item.id === id);
             data.push(lastElement);
+            return 0;
         });
         console.log(data);
         axios.post('http://localhost:3000/api/classrooms/add-teacher-id', data).then((res) => {
@@ -112,12 +125,24 @@ const AddTeacherToSchedule = () => {
                 err: res.data.code === 200 ? false : true,
                 mess: res.data.message,
             });
+            setIsLoading(false);
         });
     };
     return (
         <>
             <Title title={'Thêm giảng viên vào Thời khoá biểu'} />
             {message.mess ? <div className={message.err ? 'text-danger' : 'text-success'}>{message.mess}</div> : <></>}
+            {isLoading ? (
+                <Row>
+                    <Col></Col>
+                    <Col>
+                        <Loading />
+                    </Col>{' '}
+                    <Col></Col>
+                </Row>
+            ) : (
+                <></>
+            )}
             <Row>
                 <FormGroup as={Col}>
                     <FormLabel>Khoá</FormLabel>

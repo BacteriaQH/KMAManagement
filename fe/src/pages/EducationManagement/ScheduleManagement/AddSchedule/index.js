@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Col, FormCheck, FormGroup, FormLabel, FormSelect, Row } from 'react-bootstrap';
+import Loading from '../../../../components/Loading';
 import Title from '../../../../components/Title';
 
 function AddSchedule() {
@@ -17,15 +18,20 @@ function AddSchedule() {
         semester: 0,
         subject: [],
     });
-
+    const [isCheckAll, setIsCheckAll] = useState(false);
+    const [isCheck, setIsCheck] = useState([]);
+    const [list, setList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const arr = [];
     for (let i = 1; i < 10; i++) {
         arr.push(i);
     }
     useEffect(() => {
+        setIsLoading(true);
         axios.post('http://localhost:3000/api/query', ['courses', 'departments']).then((res) => {
             setCourses(res.data.courses);
             setDepartment(res.data.departments);
+            setIsLoading(false);
         });
     }, []);
     const handleChange = (e) => {
@@ -37,17 +43,16 @@ function AddSchedule() {
         });
     };
     const handleChangeToFetch = (e) => {
+        setIsLoading(true);
         axios
             .get('http://localhost:3000/api/subjects/department', {
                 params: { department: e.target.value },
             })
             .then((res) => {
                 setSubjects(res.data);
+                setIsLoading(false);
             });
     };
-    const [isCheckAll, setIsCheckAll] = useState(false);
-    const [isCheck, setIsCheck] = useState([]);
-    const [list, setList] = useState([]);
 
     useEffect(() => {
         setList(subjects);
@@ -73,11 +78,12 @@ function AddSchedule() {
             subject: subs,
         });
     }, [isCheck]);
+
     const handleClick = () => {
-        console.log(formData);
+        setIsLoading(true);
         axios.post('http://localhost:3000/api/semesters/add', formData).then((res) => {
-            console.log(res.data);
             setMessage({ code: res.data.code, message: res.data.message });
+            setIsLoading(false);
         });
     };
     return (
@@ -89,6 +95,17 @@ function AddSchedule() {
                 ) : (
                     <div className="text-danger">{message.message}</div>
                 )
+            ) : (
+                <></>
+            )}
+            {isLoading ? (
+                <Row>
+                    <Col></Col>
+                    <Col>
+                        <Loading />
+                    </Col>{' '}
+                    <Col></Col>
+                </Row>
             ) : (
                 <></>
             )}

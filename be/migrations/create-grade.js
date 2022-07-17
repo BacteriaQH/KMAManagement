@@ -25,23 +25,23 @@ module.exports = {
             grade2: {
                 type: Sequelize.FLOAT,
             },
+            exam1: {
+                type: Sequelize.FLOAT,
+            },
             average1: {
                 type: Sequelize.FLOAT,
             },
-            first_exam: {
-                type: Sequelize.FLOAT,
-            },
-            first_letter: {
+            letter1: {
                 type: Sequelize.STRING,
-            },
-            second_letter: {
-                type: Sequelize.STRING,
-            },
-            second_exam: {
-                type: Sequelize.FLOAT,
             },
             average2: {
                 type: Sequelize.FLOAT,
+            },
+            exam2: {
+                type: Sequelize.FLOAT,
+            },
+            letter2: {
+                type: Sequelize.STRING,
             },
             createdAt: {
                 allowNull: false,

@@ -33,10 +33,12 @@ import AddSchedule from '../pages/EducationManagement/ScheduleManagement/AddSche
 import AddTeacherToSchedule from '../pages/EducationManagement/ScheduleManagement/AddTeacherToSchedule';
 import EditSubject from '../pages/EducationManagement/SubjectManagement/Edit';
 import AddClassroom from '../pages/EducationManagement/ScheduleManagement/AddClassroom';
+import Description from '../pages/Description';
 
-const routes = [
+const adminRoutes = [
     { path: '/login', component: Login, defaultLayout: false },
-    { path: '/', component: Home, defaultLayout: true },
+    { path: '/home', component: Home, defaultLayout: true },
+    { path: '/', component: Description },
     { path: '/students/profile', component: StudentProfile, defaultLayout: true },
     { path: '/students/profile/add', component: AddStudent, defaultLayout: true },
     { path: '/students/profile/edit/:id', component: EditStudent, defaultLayout: true },
@@ -47,7 +49,7 @@ const routes = [
 
     { path: '/teachers/profile', component: TeacherProfile, defaultLayout: true },
     { path: '/teachers/profile/add', component: AddTeacher, defaultLayout: true },
-    { path: '/teachers/profile/edit/:id', component: EditTeacher, defaultLayout: true }, //no
+    { path: '/teachers/profile/edit/:id', component: EditTeacher, defaultLayout: true },
     { path: '/teachers/profile/list', component: ListTeacher, defaultLayout: true },
 
     { path: '/grades', component: GradeManagement, defaultLayout: true },
@@ -66,5 +68,7 @@ const routes = [
     { path: '/schedule/add-teachers-to-schedule', component: AddTeacherToSchedule, defaultLayout: true },
     { path: '/schedule/add-classroom', component: AddClassroom, defaultLayout: true },
 ];
-
+const routes = {
+    adminRoutes,
+};
 export default routes;

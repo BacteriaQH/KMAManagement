@@ -1,6 +1,16 @@
 import { useRef, useState } from 'react';
 
-import { FormGroup, Table, Button as ButtonBootstrap, FormControl, Tabs, Tab, FormLabel, Col } from 'react-bootstrap';
+import {
+    FormGroup,
+    Table,
+    Button as ButtonBootstrap,
+    FormControl,
+    Tabs,
+    Tab,
+    FormLabel,
+    Col,
+    Row,
+} from 'react-bootstrap';
 
 import { faPenSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,12 +20,15 @@ import * as xlsx from 'xlsx';
 
 import Title from '~/components/Title';
 import { Link } from 'react-router-dom';
+import Loading from '../../../../components/Loading';
 
 function ListTeacher() {
     const fileRef = useRef();
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
     const [excelBodyValue, setExcelBodyValue] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const [valueFetch, setValueFetch] = useState('');
 
     const ExportToExcel = () => {
@@ -45,6 +58,7 @@ function ListTeacher() {
         reader.readAsBinaryString(file);
     };
     const handleFetchData = () => {
+        setIsLoading(true);
         axios.get('http://localhost:3000/api/teachers/list').then((res) => {
             res.data.map((data) => {
                 if (data.gender === true) {
@@ -55,6 +69,7 @@ function ListTeacher() {
                 return 1;
             });
             setValueFetch(res.data);
+            setIsLoading(false);
         });
     };
 
@@ -63,6 +78,17 @@ function ListTeacher() {
             <Title title="Danh sách giảng viên" />
             <Tabs defaultActiveKey={'list'} transition className="m-3">
                 <Tab eventKey={'list'} title="Danh sách giảng viên">
+                    {isLoading ? (
+                        <Row>
+                            <Col></Col>
+                            <Col>
+                                <Loading />
+                            </Col>{' '}
+                            <Col></Col>
+                        </Row>
+                    ) : (
+                        <></>
+                    )}
                     <FormGroup as={Col}>
                         <FormLabel>Tra cứu</FormLabel>
                         <br />
@@ -79,20 +105,20 @@ function ListTeacher() {
                             Xuất excel
                         </ButtonBootstrap>
                     </FormGroup>
-                    <Table striped hover>
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Họ và Tên</th>
-                                <th scope="col">Giới tính</th>
-                                <th scope="col">Mã giảng viên</th>
-                                <th scope="col">Khoa</th>
-                                <th scope="col">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {valueFetch ? (
-                                valueFetch.map((value, index) => (
+                    {valueFetch ? (
+                        <Table striped hover>
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Họ và Tên</th>
+                                    <th scope="col">Giới tính</th>
+                                    <th scope="col">Mã giảng viên</th>
+                                    <th scope="col">Khoa</th>
+                                    <th scope="col">&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {valueFetch.map((value, index) => (
                                     <tr key={index}>
                                         <th scope="row">{value.id}</th>
                                         <td>{value.name}</td>
@@ -108,12 +134,12 @@ function ListTeacher() {
                                             </Link>
                                         </td>
                                     </tr>
-                                ))
-                            ) : (
-                                <></>
-                            )}
-                        </tbody>
-                    </Table>
+                                ))}
+                            </tbody>
+                        </Table>
+                    ) : (
+                        <></>
+                    )}
                 </Tab>
                 <Tab eventKey={'import'} title="Import file excel">
                     <FormGroup>
