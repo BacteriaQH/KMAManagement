@@ -19,7 +19,7 @@ import {
 
 import axios from 'axios';
 import Title from '~/components/Title';
-
+import url from '../../../../jsconfig';
 const EditStudent = () => {
     const fileRef = useRef();
     const navigate = useNavigate();
@@ -77,7 +77,7 @@ const EditStudent = () => {
     });
     useEffect(() => {
         axios
-            .get('http://localhost:3000/api/students/id', {
+            .get(`${url.SERVER_URL}/api/students/id`, {
                 params: { id: match.id },
             })
             .then((res) => {
@@ -103,7 +103,7 @@ const EditStudent = () => {
         e.preventDefault();
         const upload = new FormData();
         upload.append('file', e.target.files[0]);
-        axios.post('http://localhost:3000/api/upload', upload).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/upload`, upload).then((res) => {
             setImage(res.data.filename);
             setFormData({
                 ...formData,
@@ -120,7 +120,7 @@ const EditStudent = () => {
     };
     const handleClick = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3000/api/students/update', formData).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/students/update`, formData).then((res) => {
             res.data.code === 200 ? navigate('/students/profile/list') : setMessage(res.data.message);
         });
     };
@@ -156,7 +156,7 @@ const EditStudent = () => {
                         </Col>
                         <Col className="d-flex justify-content-center">
                             {image ? (
-                                <Image src={`http://localhost:3000/${image}`} alt={image} width={'150px'} />
+                                <Image src={`${url.SERVER_URL}/${image}`} alt={image} width={'150px'} />
                             ) : (
                                 <FormGroup className="d-flex justify-content-center">
                                     <FontAwesomeIcon

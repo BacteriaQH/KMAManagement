@@ -23,7 +23,7 @@ import Search from '~/components/Search';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Loading from '../../../../components/Loading';
-
+import url from '../../../../jsconfig';
 function ListStudent() {
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
@@ -55,7 +55,7 @@ function ListStudent() {
     };
     useEffect(() => {
         setIsLoading(true);
-        axios.post('http://localhost:3000/api/query', ['departments', 'classes', 'courses']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['departments', 'classes', 'courses']).then((res) => {
             setDepartments(res.data.departments);
             setClasses(res.data.classes);
             setCourses(res.data.courses);
@@ -66,7 +66,7 @@ function ListStudent() {
     const handleFetchData = () => {
         setIsLoading(true);
         axios
-            .get('http://localhost:3000/api/students/by-class', {
+            .get(`${url.SERVER_URL}/api/students/by-class`, {
                 params: { classes: classSelect },
             })
             .then((res) => {

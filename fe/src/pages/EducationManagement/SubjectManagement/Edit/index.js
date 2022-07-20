@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Form, FormControl, FormGroup, FormLabel, FormSelect, Row } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import Title from '../../../../components/Title';
-
+import url from '../../../../jsconfig';
 function EditSubject() {
     const navigate = useNavigate();
     const match = useParams();
@@ -19,14 +19,14 @@ function EditSubject() {
         exercise: '',
     });
     useEffect(() => {
-        axios.post('http://localhost:3000/api/query', ['departments']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['departments']).then((res) => {
             console.log(res.data.departments);
             setDepartment(res.data.departments);
         });
     }, []);
     useEffect(() => {
         axios
-            .get('http://localhost:3000/api/subjects/id', {
+            .get(`${url.SERVER_URL}/api/subjects/id`, {
                 params: { id: match.id },
             })
             .then((res) => {
@@ -45,7 +45,7 @@ function EditSubject() {
     };
     const handleClick = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3000/api/subjects/update', formData).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/subjects/update`, formData).then((res) => {
             res.data.code === 200 ? navigate('/subjects/list') : setMessage(res.data.message);
         });
     };

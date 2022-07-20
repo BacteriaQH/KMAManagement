@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, FormCheck, FormGroup, FormLabel, FormSelect, Row } from 'react-bootstrap';
 import Loading from '../../../../components/Loading';
 import Title from '../../../../components/Title';
-
+import url from '../../../../jsconfig';
 function AddSchedule() {
     const [courses, setCourses] = useState('');
     const [department, setDepartment] = useState('');
@@ -28,7 +28,7 @@ function AddSchedule() {
     }
     useEffect(() => {
         setIsLoading(true);
-        axios.post('http://localhost:3000/api/query', ['courses', 'departments']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['courses', 'departments']).then((res) => {
             setCourses(res.data.courses);
             setDepartment(res.data.departments);
             setIsLoading(false);
@@ -45,7 +45,7 @@ function AddSchedule() {
     const handleChangeToFetch = (e) => {
         setIsLoading(true);
         axios
-            .get('http://localhost:3000/api/subjects/department', {
+            .get(`${url.SERVER_URL}/api/subjects/department`, {
                 params: { department: e.target.value },
             })
             .then((res) => {
@@ -81,7 +81,7 @@ function AddSchedule() {
 
     const handleClick = () => {
         setIsLoading(true);
-        axios.post('http://localhost:3000/api/semesters/add', formData).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/semesters/add`, formData).then((res) => {
             setMessage({ code: res.data.code, message: res.data.message });
             setIsLoading(false);
         });

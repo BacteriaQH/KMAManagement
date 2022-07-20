@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Col, FormCheck, FormControl, FormGroup, FormLabel, FormSelect, Row, Table } from 'react-bootstrap';
 import Title from '../../../../components/Title';
+import url from '../../../../jsconfig';
 
 function ManagementClass() {
     const [courses, setCourses] = useState('');
@@ -33,17 +34,17 @@ function ManagementClass() {
         });
     };
     useEffect(() => {
-        axios.post('http://localhost:3000/api/query', ['courses']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['courses']).then((res) => {
             setCourses(res.data.courses);
         });
     }, []);
     useEffect(() => {
-        axios.post('http://localhost:3000/api/query', ['classes']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['classes']).then((res) => {
             setClasses(res.data.classes);
         });
     }, [reloading]);
     useEffect(() => {
-        axios.get('http://localhost:3000/api/students/no-class').then((res) => {
+        axios.get(`${url.SERVER_URL}/api/students/no-class`).then((res) => {
             res.data.map((data) => {
                 if (data.gender === true) {
                     data.gender = 'Nam';
@@ -58,7 +59,7 @@ function ManagementClass() {
     const handleClick = (e) => {
         e.preventDefault();
         console.log(formData);
-        axios.post('http://localhost:3000/api/classes/add', formData).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/classes/add`, formData).then((res) => {
             if (res.data.code === 200) {
                 setReloading(1);
                 setSuccess(1);
@@ -131,7 +132,7 @@ function ManagementClass() {
                                 });
                                 return true;
                             });
-                            axios.post('http://localhost:3000/api/students/update-class', d).then((res) => {
+                            axios.post(`${url.SERVER_URL}/api/students/update-class`, d).then((res) => {
                                 if (res.data.code === 200) {
                                     setSuccess(1);
                                     setMessage(res.data.message);

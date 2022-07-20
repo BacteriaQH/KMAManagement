@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button, Col, FormCheck, FormControl, FormGroup, FormLabel, FormSelect, Image, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Title from '../../../../components/Title';
-
+import url from '../../../../jsconfig';
 function AddTeacher() {
     const fileRef = useRef();
     const navigate = useNavigate();
@@ -26,17 +26,17 @@ function AddTeacher() {
         e.preventDefault();
         const data = new FormData();
         data.append('file', e.target.files[0]);
-        axios.post('http://localhost:3000/api/upload', data).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/upload`, data).then((res) => {
             setImage(res.data);
             setFormData({
                 ...formData,
-                [e.target.name]: `http://localhost:3000/${res.data.filename}`,
+                [e.target.name]: `${url.SERVER_URL}${res.data.filename}`,
             });
         });
     };
     const [department, setDepartment] = useState('');
     useEffect(() => {
-        axios.post('http://localhost:3000/api/query', ['departments']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['departments']).then((res) => {
             setDepartment(res.data.departments);
         });
     }, []);
@@ -49,7 +49,7 @@ function AddTeacher() {
     };
     const handleClick = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3000/api/teachers/add', formData).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/teachers/add`, formData).then((res) => {
             res.data.code === 200 ? navigate('/teachers/profile/list') : setMessage(res.data.message);
         });
     };
@@ -71,12 +71,8 @@ function AddTeacher() {
                 <Col className="d-flex justify-content-center">
                     {image ? (
                         <>
-                            <Image
-                                src={`http://localhost:3000/${image.filename}`}
-                                alt={image.filename}
-                                height={'150px'}
-                            />
-                            <input type={'hidden'} value={`http://localhost:3000/${image.filename}`} name="image" />
+                            <Image src={`${url.SERVER_URL}/${image.filename}`} alt={image.filename} height={'150px'} />
+                            <input type={'hidden'} value={`${url.SERVER_URL}/${image.filename}`} name="image" />
                         </>
                     ) : (
                         <FormGroup className="d-flex justify-content-center">

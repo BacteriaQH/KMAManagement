@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Form, FormControl, FormGroup, FormLabel, FormSelect, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Title from '../../../../components/Title';
-
+import url from '../../../../jsconfig';
 function AddSubject() {
     const navigate = useNavigate();
     const [department, setDepartment] = useState('');
@@ -18,7 +18,7 @@ function AddSubject() {
         exercise: '',
     });
     useEffect(() => {
-        axios.post('http://localhost:3000/api/query', ['departments']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['departments']).then((res) => {
             console.log(res.data.department);
             setDepartment(res.data.departments);
         });
@@ -32,7 +32,7 @@ function AddSubject() {
     };
     const handleClick = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3000/api/subjects/add', formData).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/subjects/add`, formData).then((res) => {
             res.data.code === 200 ? navigate('/subjects/list') : setMessage(res.data.message);
         });
     };

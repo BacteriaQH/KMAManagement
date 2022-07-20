@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, FormControl, FormGroup, FormLabel, FormSelect, Row } from 'react-bootstrap';
 import Loading from '../../../../components/Loading';
 import Title from '../../../../components/Title';
-
+import url from '../../../../jsconfig';
 function AddClassroom() {
     const [courses, setCourses] = useState('');
     const [semesters, setSemesters] = useState('');
@@ -24,7 +24,7 @@ function AddClassroom() {
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
         setIsLoading(true);
-        axios.post('http://localhost:3000/api/query', ['courses']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['courses']).then((res) => {
             setCourses(res.data.courses);
             setIsLoading(false);
         });
@@ -36,7 +36,7 @@ function AddClassroom() {
             course: e.target.value,
         });
         axios
-            .get('http://localhost:3000/api/semesters/list-by-course', {
+            .get(`${url.SERVER_URL}/api/semesters/list-by-course`, {
                 params: { course_id: e.target.value },
             })
             .then((res) => {
@@ -61,7 +61,7 @@ function AddClassroom() {
     useEffect(() => {
         setIsLoading(true);
         axios
-            .all(subjects.map((sub) => axios.get('http://localhost:3000/api/subjects/id', { params: { id: sub } })))
+            .all(subjects.map((sub) => axios.get(`${url.SERVER_URL}/api/subjects/id`, { params: { id: sub } })))
             .then((res) => {
                 let rSub = [];
                 res.map((r) => {
@@ -82,7 +82,7 @@ function AddClassroom() {
     useEffect(() => {
         setIsLoading(true);
         if (dataSend.subject && dataSend.semester && dataSend.course) {
-            axios.post('http://localhost:3000/api/classrooms/count', dataSend).then((res) => {
+            axios.post(`${url.SERVER_URL}/api/classrooms/count`, dataSend).then((res) => {
                 setCountClassroom(res.data.number);
                 setIsLoading(false);
             });
@@ -95,7 +95,7 @@ function AddClassroom() {
         });
     };
     const handleClickSubmit = () => {
-        axios.post('http://localhost:3000/api/classrooms/add', dataSend).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/classrooms/add`, dataSend).then((res) => {
             console.log(res.data);
             setMessage({ err: res.data.code === 200 ? false : true, mess: res.data.message });
         });

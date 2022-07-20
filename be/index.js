@@ -25,8 +25,8 @@ initWebRoutes(app);
 
 const PORT = process.env.PORT || 3001;
 
-app.get('/api', (req, res) => {
-    res.send('api');
+app.get('/', (req, res) => {
+    res.send('hello api');
 });
 
 conn();

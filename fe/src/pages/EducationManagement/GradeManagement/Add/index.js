@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Col, FormGroup, FormLabel, FormSelect, Row, Button, Table, FormControl } from 'react-bootstrap';
 import Title from '~/components/Title';
+import url from '../../../../jsconfig';
 function AddGrade() {
     const [classes, setClasses] = useState('');
     const [classSelect, setClassSelect] = useState('');
@@ -15,12 +16,12 @@ function AddGrade() {
         mess: '',
     });
     useEffect(() => {
-        axios.post('http://localhost:3000/api/query', ['classes']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['classes']).then((res) => {
             setClasses(res.data.classes);
         });
     }, []);
     useEffect(() => {
-        axios.get('http://localhost:3000/api/subjects/list').then((res) => {
+        axios.get(`${url.SERVER_URL}/api/subjects/list`).then((res) => {
             setSubjects(res.data);
         });
     }, []);
@@ -30,7 +31,7 @@ function AddGrade() {
 
     const handleFetchData = () => {
         axios
-            .get('http://localhost:3000/api/students/by-class', {
+            .get(`${url.SERVER_URL}/api/students/by-class`, {
                 params: { classes: classSelect },
             })
             .then((res) => {
@@ -75,7 +76,7 @@ function AddGrade() {
             return 0;
         });
         console.log(data);
-        axios.post('http://localhost:3000/api/grades/add', data).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/grades/add`, data).then((res) => {
             setMessage({
                 err: res.data.code === 200 ? false : true,
                 mess: res.data.message,

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
+import url from '../../jsconfig';
 const { Form, Row, FormGroup, Col, FormLabel, FormSelect } = require('react-bootstrap');
 
 const Search = ({ showStudentSelect = false, showSubjectSelect = false }) => {
@@ -12,7 +12,7 @@ const Search = ({ showStudentSelect = false, showSubjectSelect = false }) => {
     const [classSelect, setClassSelect] = useState('');
     const [student, setStudent] = useState('');
     useEffect(() => {
-        axios.post('http://localhost:3000/api/query', ['departments', 'classes', 'courses']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['departments', 'classes', 'courses']).then((res) => {
             setDepartments(res.data.departments);
             setClasses(res.data.classes);
             setCourses(res.data.courses);
@@ -23,7 +23,7 @@ const Search = ({ showStudentSelect = false, showSubjectSelect = false }) => {
     };
     useEffect(() => {
         axios
-            .get('http://localhost:3000/api/students/by-class', {
+            .get(`${url.SERVER_URL}/api/students/by-class`, {
                 params: { classes: classSelect },
             })
             .then((res) => {

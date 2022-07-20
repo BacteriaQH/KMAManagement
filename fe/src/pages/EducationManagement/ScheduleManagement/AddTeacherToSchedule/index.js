@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, FormGroup, FormLabel, FormSelect, Row, Table } from 'react-bootstrap';
 import Loading from '../../../../components/Loading';
 import Title from '../../../../components/Title';
-
+import url from '../../../../jsconfig';
 const AddTeacherToSchedule = () => {
     const [courses, setCourses] = useState('');
     const [semesters, setSemesters] = useState('');
@@ -25,10 +25,10 @@ const AddTeacherToSchedule = () => {
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
         setIsLoading(true);
-        axios.post('http://localhost:3000/api/query', ['courses']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['courses']).then((res) => {
             setCourses(res.data.courses);
         });
-        axios.get('http://localhost:3000/api/teachers/list').then((res) => {
+        axios.get(`${url.SERVER_URL}/api/teachers/list`).then((res) => {
             setTeachers(res.data);
             setIsLoading(false);
         });
@@ -40,7 +40,7 @@ const AddTeacherToSchedule = () => {
             course: e.target.value,
         });
         axios
-            .get('http://localhost:3000/api/semesters/list-by-course', {
+            .get(`${url.SERVER_URL}/api/semesters/list-by-course`, {
                 params: { course_id: e.target.value },
             })
             .then((res) => {
@@ -64,7 +64,7 @@ const AddTeacherToSchedule = () => {
     useEffect(() => {
         setIsLoading(true);
         axios
-            .all(subjects.map((sub) => axios.get('http://localhost:3000/api/subjects/id', { params: { id: sub } })))
+            .all(subjects.map((sub) => axios.get(`${url.SERVER_URL}/api/subjects/id`, { params: { id: sub } })))
             .then((res) => {
                 let rSub = [];
                 res.map((r) => {
@@ -83,7 +83,7 @@ const AddTeacherToSchedule = () => {
     };
     const handleFetchData = () => {
         setIsLoading(true);
-        axios.post('http://localhost:3000/api/classrooms/find', dataSend).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/classrooms/find`, dataSend).then((res) => {
             setClassrooms(res.data);
             const arr = [];
             const idArr = [];
@@ -120,7 +120,7 @@ const AddTeacherToSchedule = () => {
             return 0;
         });
         console.log(data);
-        axios.post('http://localhost:3000/api/classrooms/add-teacher-id', data).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/classrooms/add-teacher-id`, data).then((res) => {
             setMessage({
                 err: res.data.code === 200 ? false : true,
                 mess: res.data.message,

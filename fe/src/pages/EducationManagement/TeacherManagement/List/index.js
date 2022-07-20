@@ -21,7 +21,7 @@ import * as xlsx from 'xlsx';
 import Title from '~/components/Title';
 import { Link } from 'react-router-dom';
 import Loading from '../../../../components/Loading';
-
+import url from '../../../../jsconfig';
 function ListTeacher() {
     const fileRef = useRef();
     const [showExcel, setShowExcel] = useState(false);
@@ -59,7 +59,7 @@ function ListTeacher() {
     };
     const handleFetchData = () => {
         setIsLoading(true);
-        axios.get('http://localhost:3000/api/teachers/list').then((res) => {
+        axios.get(`${url.SERVER_URL}/api/teachers/list`).then((res) => {
             res.data.map((data) => {
                 if (data.gender === true) {
                     data.gender = 'Nam';

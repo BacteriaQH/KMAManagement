@@ -20,7 +20,7 @@ import * as xlsx from 'xlsx';
 import Title from '~/components/Title';
 import axios from 'axios';
 import Loading from '../../../../components/Loading';
-
+import url from '../../../../jsconfig';
 function ListSubject() {
     const fileRef = useRef();
 
@@ -50,7 +50,7 @@ function ListSubject() {
     };
     const handleFetchData = () => {
         setIsLoading(true);
-        axios.get('http://localhost:3000/api/subjects/list').then((res) => {
+        axios.get(`${url.SERVER_URL}/api/subjects/list`).then((res) => {
             setValueFetch(res.data);
             setIsLoading(false);
         });

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, FormControl, FormGroup, FormLabel, FormSelect, Row } from 'react-bootstrap';
 import Loading from '../../../components/Loading';
 import Title from '../../../components/Title';
-
+import url from '../../../jsconfig';
 function Authorization() {
     const [data, setData] = useState({
         email: '',
@@ -24,13 +24,13 @@ function Authorization() {
     };
     useEffect(() => {
         setIsLoading(true);
-        axios.get('http://localhost:3000/api/roles/list').then((res) => {
+        axios.get(`${url.SERVER_URL}/api/roles/list`).then((res) => {
             setRoles(res.data);
             setIsLoading(false);
         });
     }, []);
     const handleSubmit = () => {
-        axios.post('http://localhost:3000/api/register', data).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/register`, data).then((res) => {
             setMessage({
                 err: res.data.code === 200 ? false : true,
                 mess: res.data.message,

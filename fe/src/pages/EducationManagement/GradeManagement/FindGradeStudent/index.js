@@ -4,7 +4,7 @@ import axios from 'axios';
 import Title from '../../../../components/Title';
 import { Col, Row, Table } from 'react-bootstrap';
 import Loading from '../../../../components/Loading';
-
+import url from '../../../../jsconfig';
 function FindGradeStudent() {
     const match = useParams();
     const [isLoading, setIsLoading] = useState(false);
@@ -14,14 +14,14 @@ function FindGradeStudent() {
     useEffect(() => {
         setIsLoading(true);
         axios
-            .get('http://localhost:3000/api/grade/find-grade-by-student-id', {
+            .get(`${url.SERVER_URL}/api/grade/find-grade-by-student-id`, {
                 params: { student_id: match.id },
             })
             .then((res) => {
                 setGrade(res.data);
             });
         axios
-            .get('http://localhost:3000/api/students/id', {
+            .get(`${url.SERVER_URL}/api/students/id`, {
                 params: { id: match.id },
             })
             .then((res) => {

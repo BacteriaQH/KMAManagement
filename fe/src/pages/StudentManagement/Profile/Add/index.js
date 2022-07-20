@@ -7,7 +7,7 @@ import { Form, Tab, Tabs, Row, Col, Button, FormGroup, FormLabel, FormControl, I
 
 import axios from 'axios';
 import Title from '~/components/Title';
-
+import url from '../../../../jsconfig';
 const AddStudent = () => {
     const fileRef = useRef();
     const navigate = useNavigate();
@@ -67,7 +67,7 @@ const AddStudent = () => {
         e.preventDefault();
         const upload = new FormData();
         upload.append('file', e.target.files[0]);
-        axios.post('http://localhost:3000/api/upload', upload).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/upload`, upload).then((res) => {
             setImage(res.data.filename);
             console.log(res.data);
             setFormData({
@@ -85,7 +85,7 @@ const AddStudent = () => {
     };
     const handleClick = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3000/api/students/add', formData).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/students/add`, formData).then((res) => {
             res.data.code === 200 ? navigate('/students/profile/list') : setMessage(res.data.message);
         });
     };
@@ -119,7 +119,7 @@ const AddStudent = () => {
                         </Col>
                         <Col className="d-flex justify-content-center">
                             {image ? (
-                                <Image src={`http://localhost:3000/${image}`} alt={image} width={'150px'} />
+                                <Image src={`${url.SERVER_URL}/${image}`} alt={image} width={'150px'} />
                             ) : (
                                 <FormGroup className="d-flex justify-content-center">
                                     <FontAwesomeIcon

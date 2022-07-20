@@ -17,7 +17,7 @@ import * as xlsx from 'xlsx';
 import Search from '~/components/Search';
 import Title from '~/components/Title';
 import Loading from '~/components/Loading';
-
+import url from '../../../../jsconfig';
 function FindGrade() {
     const [showExcel, setShowExcel] = useState(false);
     const [excelHeaderValue, setExcelHeaderValue] = useState([]);
@@ -53,7 +53,7 @@ function FindGrade() {
     };
     useEffect(() => {
         setIsLoading(true);
-        axios.post('http://localhost:3000/api/query', ['classes']).then((res) => {
+        axios.post(`${url.SERVER_URL}/api/query`, ['classes']).then((res) => {
             setClasses(res.data.classes);
             setIsLoading(false);
         });
@@ -64,7 +64,7 @@ function FindGrade() {
     useEffect(() => {
         setIsLoading(true);
         axios
-            .get('http://localhost:3000/api/students/by-class', {
+            .get(`${url.SERVER_URL}/api/students/by-class`, {
                 params: { classes: classSelect },
             })
             .then((res) => {
@@ -78,14 +78,14 @@ function FindGrade() {
     const handleClickToFindGrade = () => {
         setIsLoading(true);
         axios
-            .get('http://localhost:3000/api/grade/find-grade-by-student-id', {
+            .get(`${url.SERVER_URL}/api/grade/find-grade-by-student-id`, {
                 params: { student_id: studentSelect },
             })
             .then((res) => {
                 setGrade(res.data);
             });
         axios
-            .get('http://localhost:3000/api/students/id', {
+            .get(`${url.SERVER_URL}/api/students/id`, {
                 params: { id: studentSelect },
             })
             .then((res) => {
