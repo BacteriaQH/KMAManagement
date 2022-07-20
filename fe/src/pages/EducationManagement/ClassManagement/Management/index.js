@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { useEffect, useState } from 'react';
 import { Button, Col, FormCheck, FormControl, FormGroup, FormLabel, FormSelect, Row, Table } from 'react-bootstrap';
+import Loading from '../../../../components/Loading';
 import Title from '../../../../components/Title';
 import url from '../../../../jsconfig';
 
@@ -34,16 +35,23 @@ function ManagementClass() {
         });
     };
     useEffect(() => {
+        setIsLoading(true);
         axios.post(`${url.SERVER_URL}/api/query`, ['courses']).then((res) => {
             setCourses(res.data.courses);
         });
+        setIsLoading(false);
     }, []);
     useEffect(() => {
+        setIsLoading(true);
+
         axios.post(`${url.SERVER_URL}/api/query`, ['classes']).then((res) => {
             setClasses(res.data.classes);
         });
+        setIsLoading(false);
     }, [reloading]);
     useEffect(() => {
+        setIsLoading(true);
+
         axios.get(`${url.SERVER_URL}/api/students/no-class`).then((res) => {
             res.data.map((data) => {
                 if (data.gender === true) {
@@ -55,10 +63,12 @@ function ManagementClass() {
             });
             setValueFetch(res.data);
         });
+        setIsLoading(false);
     }, []);
     const handleClick = (e) => {
         e.preventDefault();
-        console.log(formData);
+        setIsLoading(true);
+
         axios.post(`${url.SERVER_URL}/api/classes/add`, formData).then((res) => {
             if (res.data.code === 200) {
                 setReloading(1);
@@ -69,6 +79,7 @@ function ManagementClass() {
                 setMessage(res.data.message);
             }
         });
+        setIsLoading(false);
     };
 
     return (
@@ -76,7 +87,17 @@ function ManagementClass() {
             <Title title="Quản lý lớp học" />
             <Row>
                 {message ? <div className={success ? 'text-success' : 'text-danger'}>{message}</div> : <></>}
-
+                {isLoading ? (
+                    <Row>
+                        <Col></Col>
+                        <Col>
+                            <Loading />
+                        </Col>{' '}
+                        <Col></Col>
+                    </Row>
+                ) : (
+                    <></>
+                )}
                 <FormGroup as={Col}>
                     <FormLabel>Khoá</FormLabel>
                     <FormSelect name="course" onChange={handleChange}>

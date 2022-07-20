@@ -7,8 +7,7 @@ import routes from '~/routes';
 import DefaultLayout from './components/DefaultLayout';
 
 function App() {
-    const userRoutes = routes.teacherRoutes;
-
+    const userRoutes = routes.adminRoutes;
     return (
         <Router>
             <div className="App">

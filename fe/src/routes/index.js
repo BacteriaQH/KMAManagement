@@ -38,6 +38,7 @@ import Authorization from '../pages/Others/Authorization';
 import Others from '../pages/Others';
 import FindGradeStudent from '../pages/EducationManagement/GradeManagement/FindGradeStudent';
 
+import NotFound from '../pages/NotFound';
 const adminRoutes = [
     { path: '/login', component: Login, defaultLayout: false },
     { path: '/home', component: Home, defaultLayout: true },
@@ -74,6 +75,8 @@ const adminRoutes = [
 
     { path: '/others', component: Others, defaultLayout: true },
     { path: '/others/authorization', component: Authorization, defaultLayout: true },
+
+    { path: '*', component: NotFound, defaultLayout: false },
 ];
 
 //Học viên
@@ -87,6 +90,8 @@ const studentRoutes = [
 
     { path: '/grades', component: GradeManagement, defaultLayout: true },
     { path: '/grades/find/:id', component: FindGradeStudent, defaultLayout: true },
+
+    { path: '*', component: NotFound, defaultLayout: false },
 ];
 
 //Giảng viên
@@ -100,6 +105,8 @@ const teacherRoutes = [
 
     { path: '/grades', component: GradeManagement, defaultLayout: true },
     { path: '/grades/add', component: AddGrade, defaultLayout: true },
+
+    { path: '*', component: NotFound, defaultLayout: false },
 ];
 
 //Khảo thí
@@ -112,6 +119,8 @@ const department1 = [
     { path: '/grades/add', component: AddGrade, defaultLayout: true },
     { path: '/grades/find', component: FindGrade, defaultLayout: true },
     { path: '/grades/find/:id', component: FindGradeStudent, defaultLayout: true },
+
+    { path: '*', component: NotFound, defaultLayout: false },
 ];
 
 //Hệ QLSV
@@ -124,6 +133,8 @@ const department2 = [
     { path: '/students/profile/add', component: AddStudent, defaultLayout: true },
     { path: '/students/profile/edit/:id', component: EditStudent, defaultLayout: true },
     { path: '/students/profile/list', component: ListStudent, defaultLayout: true },
+
+    { path: '*', component: NotFound, defaultLayout: false },
 ];
 
 //Đào tạo
@@ -143,6 +154,8 @@ const department3 = [
     { path: '/schedule/add', component: AddSchedule, defaultLayout: true },
     { path: '/schedule/add-teachers-to-schedule', component: AddTeacherToSchedule, defaultLayout: true },
     { path: '/schedule/add-classroom', component: AddClassroom, defaultLayout: true },
+
+    { path: '*', component: NotFound, defaultLayout: false },
 ];
 
 const routes = {
