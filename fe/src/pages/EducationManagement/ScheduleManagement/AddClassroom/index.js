@@ -96,7 +96,6 @@ function AddClassroom() {
     };
     const handleClickSubmit = () => {
         axios.post(`${url.SERVER_URL}/api/classrooms/add`, dataSend).then((res) => {
-            console.log(res.data);
             setMessage({ err: res.data.code === 200 ? false : true, mess: res.data.message });
         });
     };

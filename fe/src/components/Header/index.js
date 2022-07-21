@@ -1,12 +1,12 @@
 import { Button, Col, Row } from 'react-bootstrap';
-
-import Role from '../Role';
-import Image from '../Image';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
+import Role from '../Role';
+import Image from '../Image';
+
 function Header() {
-    const user = useSelector((state) => state.auth.login.currentUser.result);
+    const user = useSelector((state) => state.mainReducer.user.user);
     let role_name;
     switch (Number.parseInt(user.role_symbol)) {
         case 1:

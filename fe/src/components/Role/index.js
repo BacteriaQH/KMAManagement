@@ -1,16 +1,24 @@
 import { forwardRef } from 'react';
 import Tippy from '@tippyjs/react/headless';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Button as BootstrapButton } from 'react-bootstrap';
 import Image from '../Image';
 import Button from '../Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const Dropdown = () => {
+    const navigate = useNavigate();
+    const handleLogOut = () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('access_token');
+        localStorage.setItem('role_symbol', '0');
+        navigate('/');
+    };
     return (
         <span className="d-flex flex-column bg-light border rounded-3">
             <Button to="/home">Cài đặt</Button>
-            <Button to="/login">Đăng xuất</Button>
+            <BootstrapButton onClick={handleLogOut}>Đăng xuất</BootstrapButton>
         </span>
     );
 };

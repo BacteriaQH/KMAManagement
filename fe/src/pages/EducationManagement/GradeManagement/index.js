@@ -5,7 +5,7 @@ import Title from '~/components/Title';
 import { useSelector } from 'react-redux';
 
 function GradeManagement() {
-    const user = useSelector((state) => state.auth.login?.currentUser?.result);
+    const user = useSelector((state) => state.mainReducer.user.user);
 
     return (
         <>

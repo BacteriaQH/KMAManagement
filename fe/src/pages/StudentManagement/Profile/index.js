@@ -4,7 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 function StudentProfile() {
-    const user = useSelector((state) => state.auth.login?.currentUser?.result);
+    const user = useSelector((state) => state.mainReducer.user.user);
 
     return (
         <>

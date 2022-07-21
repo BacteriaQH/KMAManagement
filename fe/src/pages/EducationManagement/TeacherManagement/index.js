@@ -3,7 +3,7 @@ import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import { useSelector } from 'react-redux';
 function TeacherProfile() {
-    const user = useSelector((state) => state.auth.login?.currentUser?.result);
+    const user = useSelector((state) => state.mainReducer.user.user);
     return (
         <>
             <Title title={'Quản lý giảng viên'} />

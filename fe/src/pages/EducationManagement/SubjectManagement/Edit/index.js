@@ -20,7 +20,6 @@ function EditSubject() {
     });
     useEffect(() => {
         axios.post(`${url.SERVER_URL}/api/query`, ['departments']).then((res) => {
-            console.log(res.data.departments);
             setDepartment(res.data.departments);
         });
     }, []);

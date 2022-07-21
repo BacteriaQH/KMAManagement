@@ -75,7 +75,6 @@ function AddGrade() {
             data.push(lastElement);
             return 0;
         });
-        console.log(data);
         axios.post(`${url.SERVER_URL}/api/grades/add`, data).then((res) => {
             setMessage({
                 err: res.data.code === 200 ? false : true,

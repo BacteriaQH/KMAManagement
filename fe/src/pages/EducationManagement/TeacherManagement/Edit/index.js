@@ -29,7 +29,7 @@ function EditTeacher() {
         const data = new FormData();
         data.append('file', e.target.files[0]);
         axios.post(`${url.SERVER_URL}/api/upload`, data).then((res) => {
-            setImage(res.data);
+            setImage(res.data.filename);
             setFormData({
                 ...formData,
                 [e.target.name]: `${url.SERVER_URL}/${res.data.filename}`,
@@ -48,7 +48,6 @@ function EditTeacher() {
             })
             .then((res) => {
                 setImage(res.data.image);
-                console.log(res.data);
                 const nameF = res.data.name.split(' ');
                 const last = nameF.pop();
                 let str = '';
@@ -110,7 +109,7 @@ function EditTeacher() {
                     {image ? (
                         <>
                             <Image src={`${url.SERVER_URL}/${image}`} alt={image.filename} height={'150px'} />
-                            <input type={'hidden'} value={`${url.SERVER_URL}/${image}`} name="image" />
+                            <input type={'hidden'} value={`${image}`} name="image" />
                         </>
                     ) : (
                         <FormGroup className="d-flex justify-content-center">

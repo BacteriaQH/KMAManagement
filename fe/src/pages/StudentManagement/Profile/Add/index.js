@@ -69,7 +69,6 @@ const AddStudent = () => {
         upload.append('file', e.target.files[0]);
         axios.post(`${url.SERVER_URL}/api/upload`, upload).then((res) => {
             setImage(res.data.filename);
-            console.log(res.data);
             setFormData({
                 ...formData,
                 [e.target.name]: `${res.data.filename}`,

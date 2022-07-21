@@ -10,12 +10,12 @@ function Description() {
                 <Col lg={3}>
                     <Row>
                         <Col lg={3}>
-                            <Link to={'/home'}>
+                            <Link to={'/'}>
                                 <Image isLogo alt={'logo'} />
                             </Link>
                         </Col>
                         <Col lg={9} className="d-flex justify-content-center align-items-center">
-                            <Link to={'/home'}>
+                            <Link to={'/'}>
                                 <h5 className="text-primary navbar-brand-name fw-bold">Quản Lý Sinh Viên</h5>
                             </Link>
                         </Col>

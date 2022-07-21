@@ -110,7 +110,7 @@ const teacherRoutes = [
 ];
 
 //Khảo thí
-const department1 = [
+const department1Routes = [
     { path: '/', component: Description },
     { path: '/login', component: Login, defaultLayout: false },
     { path: '/home', component: Home, defaultLayout: true },
@@ -124,7 +124,7 @@ const department1 = [
 ];
 
 //Hệ QLSV
-const department2 = [
+const department2Routes = [
     { path: '/', component: Description },
     { path: '/login', component: Login, defaultLayout: false },
     { path: '/home', component: Home, defaultLayout: true },
@@ -138,7 +138,7 @@ const department2 = [
 ];
 
 //Đào tạo
-const department3 = [
+const department3Routes = [
     { path: '/', component: Description },
     { path: '/login', component: Login, defaultLayout: false },
     { path: '/home', component: Home, defaultLayout: true },
@@ -157,13 +157,19 @@ const department3 = [
 
     { path: '*', component: NotFound, defaultLayout: false },
 ];
+const defaultRoutes = [
+    { path: '/login', component: Login, defaultLayout: false },
+    { path: '/', component: Description },
 
+    { path: '*', component: NotFound, defaultLayout: false },
+];
 const routes = {
     adminRoutes,
     studentRoutes,
     teacherRoutes,
-    department1,
-    department2,
-    department3,
+    department1Routes,
+    department2Routes,
+    department3Routes,
+    defaultRoutes,
 };
 export default routes;

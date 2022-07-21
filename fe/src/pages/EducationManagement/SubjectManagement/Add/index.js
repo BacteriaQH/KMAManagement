@@ -19,7 +19,6 @@ function AddSubject() {
     });
     useEffect(() => {
         axios.post(`${url.SERVER_URL}/api/query`, ['departments']).then((res) => {
-            console.log(res.data.department);
             setDepartment(res.data.departments);
         });
     }, []);

@@ -119,7 +119,6 @@ const AddTeacherToSchedule = () => {
             data.push(lastElement);
             return 0;
         });
-        console.log(data);
         axios.post(`${url.SERVER_URL}/api/classrooms/add-teacher-id`, data).then((res) => {
             setMessage({
                 err: res.data.code === 200 ? false : true,

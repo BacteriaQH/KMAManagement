@@ -6,7 +6,7 @@ import { adminMenu, studentMenu, teacherMenu, department1Menu, department2Menu, 
 import Button from '../Button';
 import { useSelector } from 'react-redux';
 const Sidebar = () => {
-    const role = useSelector((state) => state.auth.login.currentUser.result.role_symbol);
+    const role = useSelector((state) => state.mainReducer.user.user.role_symbol);
     let menu = [];
     switch (Number.parseInt(role)) {
         case 1:

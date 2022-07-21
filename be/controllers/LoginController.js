@@ -11,7 +11,7 @@ const LoginController = async (req, res) => {
     if (user) {
         const validPassword = await comparePassword(body.password, user.password);
         if (validPassword) {
-            const accessToken = jwt.sign(
+            const access_token = jwt.sign(
                 {
                     id: user.id,
                     role_symbol: user.role_symbol,
@@ -20,21 +20,20 @@ const LoginController = async (req, res) => {
                 { expiresIn: '1d' },
             );
             const { password, ...others } = user;
-            res.send({
+            res.status(200).send({
                 code: 200,
-                result: {
-                    ...others,
-                    accessToken,
-                },
+
+                ...others,
+                access_token,
             });
         } else {
-            res.send({
-                code: 400,
+            res.status(200).send({
+                code: 404,
                 message: 'Invalid password',
             });
         }
     } else {
-        return res.send({ code: 401, message: "User doesn't exist" });
+        return res.status(200).send({ code: 404, message: "User doesn't exist" });
     }
 };
 

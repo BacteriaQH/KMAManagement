@@ -2,6 +2,7 @@ import { Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 function NotFound() {
+    const role_symbol = Number(JSON.parse(localStorage.getItem('role_symbol')));
     return (
         <>
             <Row>
@@ -28,7 +29,7 @@ function NotFound() {
             <Row>
                 <Col> </Col>
                 <Col className="text-center">
-                    <Link to={'/home'} className="btn btn-primary">
+                    <Link to={role_symbol !== 0 ? '/home' : '/'} className="btn btn-primary">
                         Trang chủ
                     </Link>
                 </Col>
